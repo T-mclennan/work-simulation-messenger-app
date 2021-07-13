@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { fetchUser } from "./store/utils/thunkCreators";
+import { fetchUser } from "./actions/thunkCreators";
 import { Login, Signup, Home } from "./pages";
 import { SnackbarError } from "./components";
 
@@ -55,7 +55,7 @@ const Routes = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
+    user: state.userReducer,
   };
 };
 

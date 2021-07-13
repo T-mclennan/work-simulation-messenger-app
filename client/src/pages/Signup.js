@@ -10,7 +10,7 @@ import {
   TextField,
   FormHelperText,
 } from "@material-ui/core";
-import { register } from "./../store/utils/thunkCreators";
+import { register } from "../actions/thunkCreators";
 
 const Login = (props) => {
   const history = useHistory();
@@ -109,7 +109,7 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
+    user: state.userReducer,
   };
 };
 

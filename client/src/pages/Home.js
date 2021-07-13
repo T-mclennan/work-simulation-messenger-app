@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import { Grid, CssBaseline, Button } from "@material-ui/core";
 import { SidebarContainer } from "../components/Sidebar";
 import { ActiveChat } from "../components/ActiveChat";
-import { logout, fetchConversations } from "../store/utils/thunkCreators";
-import { clearOnLogout } from "../store/index";
+import { logout, fetchConversations } from "../actions/thunkCreators";
+import { clearOnLogout } from "../actions/authActions";
 
 const styles = {
   root: {
@@ -63,8 +63,8 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
-    conversations: state.conversations,
+    user: state.userReducer,
+    conversations: state.conversationsReducer,
   };
 };
 
