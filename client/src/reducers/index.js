@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
-import userReducer from "../reducers/user";
-import conversationsReducer from "../reducers/conversations";
-import activeConversationReducer from "../reducers/activeConversation";
+import user from "../reducers/user";
+import conversations from "../reducers/conversations";
+import activeConversation from "../reducers/activeConversation";
 import {CLEAR_ON_LOGOUT} from "../actions/actionTypes"
 
 const appReducer = combineReducers({
-  userReducer,
-  conversationsReducer,
-  activeConversationReducer
+  user,
+  conversations,
+  activeConversation
 });
 const rootReducer = (state, action) => {
   if (action.type === CLEAR_ON_LOGOUT) {

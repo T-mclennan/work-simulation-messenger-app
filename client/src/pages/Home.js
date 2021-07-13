@@ -63,8 +63,8 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.userReducer,
-    conversations: state.conversationsReducer,
+    user: state.user,
+    conversations: state.conversations,
   };
 };
 

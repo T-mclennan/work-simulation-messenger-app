@@ -18,7 +18,6 @@ axios.interceptors.request.use(async function (config) {
 // USER THUNK CREATORS
 
 export const fetchUser = () => async (dispatch) => {
-  console.log('FETCHING USER!')
   dispatch(setFetchingStatus(true));
   try {
     const { data } = await axios.get("/auth/user");

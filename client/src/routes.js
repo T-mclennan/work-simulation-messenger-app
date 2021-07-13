@@ -55,7 +55,7 @@ const Routes = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.userReducer,
+    user: state.user,
   };
 };
 
