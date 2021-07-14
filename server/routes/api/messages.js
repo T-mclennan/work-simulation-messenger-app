@@ -12,27 +12,35 @@ router.post("/", async (req, res, next) => {
     const senderId = req.user.id;
     const { recipientId, text, conversationId, sender } = req.body;
 
-    // if we already know conversation id, we can save time and just add it to message and return
-    if (conversationId) {
+    // if we don't have conversation id, find a conversation to make sure it doesn't already exist
+    if (!conversationId) {
+      let conversation = await Conversation.findConversation(
+        senderId,
+        recipientId
+      );
+
+      //if no conversation exists, create a new one
+      if (!conversation) {
+        conversation = await Conversation.createConversation(senderId, recipientId);
+        if (onlineUsers.includes(sender.id)) {
+          sender.online = true;
+        }
+      }
+
+      const conversationId = conversation.id;
       const message = await Message.create({ senderId, text, conversationId });
       return res.json({ message, sender });
     }
-    // if we don't have conversation id, find a conversation to make sure it doesn't already exist
-    let conversation = await Conversation.findConversation(
-      senderId,
-      recipientId
-    );
 
+    //If conversationId is valid and conversation exists
+    const conversation = await Conversation.findConversationById(conversationId); 
     if (!conversation) {
-      // create conversation
-      conversation = await Conversation.create({
-        user1Id: senderId,
-        user2Id: recipientId,
-      });
-      if (onlineUsers.includes(sender.id)) {
-        sender.online = true;
-      }
+      throw new Error('No conversation found by the Id provided.')
     }
+    if (senderId !== user1Id && senderId !== user2Id) {
+      throw new Error('ConversationId invalid: no conversation found.');
+    }
+
     const message = await Message.create({
       senderId,
       text,

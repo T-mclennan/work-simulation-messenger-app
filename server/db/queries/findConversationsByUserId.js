@@ -2,7 +2,7 @@
 const { User, Conversation, Message } = require("../models");
 const { Op } = require("sequelize");
 
-/** findConverSationByUsreId is a funciton that queries the postgres
+/** findConverSationByUserId is a funciton that queries the postgres
  * database for all conversations that contain the user with matching userId.
  * @param {Number} userId -  userId of current user.
  * @returns {Array} - array of conversation objects.
