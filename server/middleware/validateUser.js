@@ -2,9 +2,7 @@
 const jwt = require("jsonwebtoken");
 const { User } = require("../db/models/");
 
-/***************************************************
- * Validation middleware for our express server
- ***************************************************/
+/** validateUser is validation middleware for the express server.*/
 validateUser = function () {
   return function(req, res, next) {
     const token = req.headers["x-access-token"];
