@@ -12,7 +12,7 @@ router.get("/", async (req, res, next) => {
       return res.sendStatus(401);
     }
     const conversations = await findConversationByUserId(user.id);
-    const convoData = composeConversationData(conversations, user.username);
+    const convoData = composeConversationData(conversations);
     res.json(convoData);
   } catch (error) {
     next(error);
