@@ -49,6 +49,11 @@ export const removeOfflineUserFromStore = (state, id) => {
   });
 };
 
+// TODO: Set all messages in conversation as seen:
+export const setConversationAsSeenInStore = (state, payload) => {
+
+}
+
 export const addSearchedUsersToStore = (state, users) => {
   const currentUsers = {};
 
@@ -69,10 +74,23 @@ export const addSearchedUsersToStore = (state, users) => {
   return newState;
 };
 
+export const updateConversationAsSeen = (state, otherUsername) => {
+  return state.map((convo) => {
+    if (convo.otherUser.username === otherUsername) {
+      const {messages, unseenCount, ...rest} = convo;
+      const newMessages = messages.map((message) => {
+        const {unseenByUser, ...rest} = message;
+        return {...rest, unseenByUser: null}
+      })
+      const newConvo = {...rest, unseenCount: 0, messages: newMessages}
+      return newConvo;
+    } else {
+      return convo;
+    }
+  })
+}
+
 export const addNewConvoToStore = (state, recipientId, message) => {
-  /***************** DEBUG TEST ***************/
-  console.log('ADD NEW CONVO - REDUCER FUNCITON');
-  console.log(state, recipientId, message);
   return state.map((convo) => {
     if (convo.otherUser.id === recipientId) {
       const newConvo = { ...convo };

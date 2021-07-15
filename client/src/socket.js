@@ -18,8 +18,22 @@ socket.on("connect", () => {
   socket.on("remove-offline-user", (id) => {
     store.dispatch(removeOfflineUser(id));
   });
+
   socket.on("new-message", (data) => {
-    store.dispatch(setNewMessage(data.message, data.sender));
+    const {message, sender, senderUsername} = data
+    const {activeConversation } = store.getState();
+
+    if (message.unseenByUser){
+    //if incoming message is for current conversation, mark as seen
+      if (activeConversation === senderUsername) {
+        message.unseenByUser = null;
+        //TODO update database to reflect this change.
+      } else {
+        //TODO increment unseenCount for conversation
+      }
+    }
+
+    store.dispatch(setNewMessage(message, sender));
   });
 });
 

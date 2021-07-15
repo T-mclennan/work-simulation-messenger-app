@@ -1,6 +1,5 @@
 const { Op } = require("sequelize");
 const db = require("../db");
-const Message = require("./message");
 
 const Conversation = db.define("conversation", {});
 // TODO: Update model to set required fields like user1Id and user2Id
@@ -32,7 +31,6 @@ Conversation.findConversationById = async function (conversationId) {
   return conversation;
 }
 
-// find conversation given two user Ids
 Conversation.createConversation = async function (senderId, recipientId) {
   if (isNaN(senderId) || isNaN(recipientId)) {
     throw new Error("Error: Conversation could not be created. Two valid user Id's are needed.")

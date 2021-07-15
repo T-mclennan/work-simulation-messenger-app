@@ -6,13 +6,13 @@ const {composeConversationData} = require("../../services/api")
 // include other user model so we have info on username/profile pic (don't include current user info)
 // TODO: for scalability, implement lazy loading
 router.get("/", async (req, res, next) => {
+  const {user} = req;
   try {
-    if (!req.user) {
+    if (!user) {
       return res.sendStatus(401);
     }
-    const conversations = await findConversationByUserId(req.user.id);
-    const convoData = composeConversationData(conversations);
-    
+    const conversations = await findConversationByUserId(user.id);
+    const convoData = composeConversationData(conversations, user.username);
     res.json(convoData);
   } catch (error) {
     next(error);

@@ -10,7 +10,7 @@ router.post("/", async (req, res, next) => {
     }
 
     const senderId = req.user.id;
-    const { recipientId, text, conversationId, sender } = req.body;
+    const { recipientId, text, conversationId, sender, unseenByUser } = req.body;
 
     // if we don't have conversation id, find a conversation to make sure it doesn't already exist
     if (!conversationId) {
@@ -28,7 +28,7 @@ router.post("/", async (req, res, next) => {
       }
 
       const conversationId = conversation.id;
-      const message = await Message.create({ senderId, text, conversationId });
+      const message = await Message.create({ senderId, text, conversationId, unseenByUser });
       return res.json({ message, sender });
     }
 
@@ -37,6 +37,8 @@ router.post("/", async (req, res, next) => {
     if (!conversation) {
       throw new Error('No conversation found by the Id provided.')
     }
+    const {user1Id, user2Id} = conversation;
+
     if (senderId !== user1Id && senderId !== user2Id) {
       throw new Error('ConversationId invalid: no conversation found.');
     }
@@ -45,6 +47,7 @@ router.post("/", async (req, res, next) => {
       senderId,
       text,
       conversationId: conversation.id,
+      unseenByUser
     });
     res.json({ message, sender });
   } catch (error) {

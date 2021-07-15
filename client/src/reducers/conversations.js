@@ -4,6 +4,7 @@ import {
   addSearchedUsersToStore,
   removeOfflineUserFromStore,
   addMessageToStore,
+  updateConversationAsSeen
 } from "./utils/reducerFunctions";
 
 import { 
@@ -13,7 +14,8 @@ import {
   REMOVE_OFFLINE_USER, 
   SET_SEARCHED_USERS, 
   CLEAR_SEARCHED_USERS, 
-  ADD_CONVERSATION
+  ADD_CONVERSATION,
+  SET_CONVO_AS_SEEN
 } from '../actions/actionTypes'
 
 const conversationReducer = (state = [], action) => {
@@ -38,6 +40,8 @@ const conversationReducer = (state = [], action) => {
         action.payload.recipientId,
         action.payload.newMessage
       );
+    case SET_CONVO_AS_SEEN:
+      return updateConversationAsSeen(state, action.payload.username);
     default:
       return state;
   }

@@ -3,6 +3,7 @@ import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../actions/activeConversationActions";
+import { setConversationAsSeen } from '../../actions/conversationActions'
 import { connect } from "react-redux";
 
 const styles = {
@@ -25,11 +26,12 @@ class Chat extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const otherUser = this.props.conversation.otherUser;
+    const { classes, conversation } = this.props;
+    const otherUser = conversation.otherUser;
+    const {unseenCount} = conversation;
     return (
       <Box
-        onClick={() => this.handleClick(this.props.conversation)}
+        onClick={() => this.handleClick(conversation)}
         className={classes.root}
       >
         <BadgeAvatar
@@ -38,7 +40,10 @@ class Chat extends Component {
           online={otherUser.online}
           sidebar={true}
         />
-        <ChatContent conversation={this.props.conversation} />
+        <ChatContent conversation={conversation} />
+
+        {/****** TODO: style output ********/}
+        {unseenCount > 0 && <h3>{unseenCount}</h3>}
       </Box>
     );
   }
@@ -48,6 +53,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
+      dispatch(setConversationAsSeen(id))
     },
   };
 };

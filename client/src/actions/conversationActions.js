@@ -6,7 +6,8 @@ import {
   REMOVE_OFFLINE_USER, 
   SET_SEARCHED_USERS, 
   CLEAR_SEARCHED_USERS, 
-  ADD_CONVERSATION
+  ADD_CONVERSATION,
+  SET_CONVO_AS_SEEN
 } from './actionTypes'
 
 export const gotConversations = (conversations) => {
@@ -55,5 +56,12 @@ export const addConversation = (recipientId, newMessage) => {
   return {
     type: ADD_CONVERSATION,
     payload: { recipientId, newMessage },
+  };
+};
+
+export const setConversationAsSeen = (username) => {
+  return {
+    type: SET_CONVO_AS_SEEN,
+    payload: { username }
   };
 };

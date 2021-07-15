@@ -26,8 +26,6 @@ const ActiveChat = (props) => {
   const conversation = conversations.find(
     (conversation) => conversation.otherUser.username === activeConversation
   ) || {}
-  console.log('Active Chat - Pre-render - ');
-  console.log(conversation);
   return (
     <Box className={classes.root}>
       {conversation.otherUser && (
@@ -59,11 +57,6 @@ const mapStateToProps = (state) => {
     user: state.user,
     conversations: state.conversations,
     activeConversation: state.activeConversation,
-    // conversation: state.conversations
-      // state.conversations &&
-      // state.conversations.find(
-      //   (conversation) => conversation.otherUser.username === state.activeConversation
-      // )
   };
 };
 

@@ -5,7 +5,7 @@ const onlineUsers = require("../onlineUsers");
  * @param {Array} conversations -  array of conversation objects
  * @returns {Array} returns an array of updated conversation objects
  */
-composeConversationData = function(conversations) {
+composeConversationData = function(conversations, username) {
   const newConvo = new Array(conversations.length)
   for (let i = 0; i < conversations.length; i++) {
     const convo = conversations[i];
@@ -27,8 +27,17 @@ composeConversationData = function(conversations) {
       convoJSON.otherUser.online = false;
     }
 
+    let unseenCount = 0;
+    convoJSON.messages.forEach(message => {
+      if (message.unseenByUser === username) {
+        unseenCount++;
+      }
+    })
+
     // set properties for notification count and latest message preview
-    convoJSON.latestMessageText = convoJSON.messages[0].text;
+    const lastIndex = convoJSON.messages.length-1;
+    convoJSON.latestMessageText = convoJSON.messages[lastIndex].text;
+    convoJSON.unseenCount = unseenCount;
     newConvo[i] = convoJSON;
   }
 

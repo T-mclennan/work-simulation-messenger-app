@@ -10,6 +10,10 @@ const Message = db.define("message", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  unseenByUser: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
 });
 
 module.exports = Message;
