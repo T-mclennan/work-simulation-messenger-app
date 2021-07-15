@@ -37,6 +37,8 @@ router.post("/", async (req, res, next) => {
     if (!conversation) {
       throw new Error('No conversation found by the Id provided.')
     }
+
+    const {user1Id, user2Id} = conversation;
     if (senderId !== user1Id && senderId !== user2Id) {
       throw new Error('ConversationId invalid: no conversation found.');
     }
