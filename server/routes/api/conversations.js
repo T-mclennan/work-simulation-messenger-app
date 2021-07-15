@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const {findConversationByUserId} = require("../../db/queries")
+const Conversation = require("../../db/models/conversation")
 const {composeConversationData} = require("../../services/api")
 
 // get all conversations for a user, include latest message text for preview, and all messages
@@ -10,7 +10,7 @@ router.get("/", async (req, res, next) => {
     if (!req.user) {
       return res.sendStatus(401);
     }
-    const conversations = await findConversationByUserId(req.user.id);
+    const conversations = await Conversation.findConversationByUserId(req.user.id);
     const convoData = composeConversationData(conversations);
     
     res.json(convoData);

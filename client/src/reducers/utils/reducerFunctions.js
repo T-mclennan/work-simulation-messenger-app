@@ -70,9 +70,6 @@ export const addSearchedUsersToStore = (state, users) => {
 };
 
 export const addNewConvoToStore = (state, recipientId, message) => {
-  /***************** DEBUG TEST ***************/
-  console.log('ADD NEW CONVO - REDUCER FUNCITON');
-  console.log(state, recipientId, message);
   return state.map((convo) => {
     if (convo.otherUser.id === recipientId) {
       const newConvo = { ...convo };

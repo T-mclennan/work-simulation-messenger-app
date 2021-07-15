@@ -35,12 +35,12 @@ router.post("/", async (req, res, next) => {
     //If conversationId is valid and conversation exists
     const conversation = await Conversation.findConversationById(conversationId); 
     if (!conversation) {
-      throw new Error('No conversation found by the Id provided.')
+      res.sendStatus(404);
     }
 
     const {user1Id, user2Id} = conversation;
     if (senderId !== user1Id && senderId !== user2Id) {
-      throw new Error('ConversationId invalid: no conversation found.');
+      res.sendStatus(403);
     }
 
     const message = await Message.create({

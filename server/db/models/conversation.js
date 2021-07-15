@@ -1,12 +1,8 @@
 const { Op } = require("sequelize");
 const db = require("../db");
-const Message = require("./message");
 
 const Conversation = db.define("conversation", {});
-// TODO: Update model to set required fields like user1Id and user2Id
 
-
-// find conversation given two user Ids
 Conversation.findConversation = async function (user1Id, user2Id) {
   const conversation = await Conversation.findOne({
     where: {
@@ -21,18 +17,11 @@ Conversation.findConversation = async function (user1Id, user2Id) {
   return conversation;
 }
 
-// find conversation given two user Ids
 Conversation.findConversationById = async function (conversationId) {
-  const conversation = await Conversation.findOne({
-    where: {
-      id: conversationId
-    }
-  });
-  // return conversation or null if it doesn't exist
+  const conversation = await Conversation.findByPk(conversationId)
   return conversation;
 }
 
-// find conversation given two user Ids
 Conversation.createConversation = async function (senderId, recipientId) {
   if (isNaN(senderId) || isNaN(recipientId)) {
     throw new Error("Error: Conversation could not be created. Two valid user Id's are needed.")
@@ -43,6 +32,50 @@ Conversation.createConversation = async function (senderId, recipientId) {
   });
 
   return conversation;
+}
+
+/** The findConverSationByUserId method queries the postgres database 
+ * for all conversations that contain the user with matching userId.
+ * @param {Number} userId -  userId of current user.
+ * @returns {Array} - array of conversation objects.
+ */
+Conversation.findConversationsByUserId = async function(userId) {
+  const conversations = await Conversation.findAll({
+    where: {
+      [Op.or]: {
+        user1Id: userId,
+        user2Id: userId,
+      },
+    },
+    attributes: ["id"],
+    order: [[Message, "createdAt", "ASC"]],
+    include: [
+      { model: Message, order: ["createdAt", "ASC"] },
+      {
+        model: User,
+        as: "user1",
+        where: {
+          id: {
+            [Op.not]: userId,
+          },
+        },
+        attributes: ["id", "username", "photoUrl"],
+        required: false,
+      },
+      {
+        model: User,
+        as: "user2",
+        where: {
+          id: {
+            [Op.not]: userId,
+          },
+        },
+        attributes: ["id", "username", "photoUrl"],
+        required: false,
+      },
+    ],
+  });
+  return conversations;
 }
 
 module.exports = Conversation;
