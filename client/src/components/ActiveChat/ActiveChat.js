@@ -56,7 +56,11 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     conversations: state.conversations,
+<<<<<<< HEAD
     activeConversationUserId: state.activeConversationUserId,
+=======
+    activeConversation: state.activeConversation,
+>>>>>>> develop
   };
 };
 
