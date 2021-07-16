@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  setConversationAsSeen
 } from "../actions/conversationActions";
 import { gotUser, setFetchingStatus } from "./userActions";
 
@@ -100,6 +101,18 @@ export const postMessage = (body) => async (dispatch) => {
       dispatch(setNewMessage(data.message));
     }
     sendMessage(data, body);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const markConvoAsSeen = (id) => async (dispatch) => {
+  try {
+    const { data } = await axios.post(`/api/conversations/viewed?id=${id}`);
+    if (!data) {
+      throw new Error(`Server request failed.`)
+    }
+    dispatch(setConversationAsSeen(id));
   } catch (error) {
     console.error(error);
   }

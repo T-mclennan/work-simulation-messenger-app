@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const {Conversation} = require("../../db/models")
 const {findConversationByUserId} = require("../../db/queries")
 const {composeConversationData} = require("../../services/api")
 
@@ -20,16 +21,17 @@ router.get("/", async (req, res, next) => {
 });
 
 // Resets the counter for a given conversation based on id
-router.post("/resetConvoById:id", async (req, res, next) => {
+router.post("/viewed", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
     }
-    const { conversationId } = req.params;
-    const updatedConvo = await Conversation.resetUnseenCount(conversationId)
 
-    if(!updatedConvo) throw ('Error while Fetching Data');
-    res.sendStatus(200);
+    if (req.query.id) {
+      const updatedConvo = await Conversation.resetUnseenCount(req.query.id)
+      if(!updatedConvo) throw ('Error while Fetching Data');
+      res.sendStatus(200);
+    }
   } catch (error) {
     next(error);
   }

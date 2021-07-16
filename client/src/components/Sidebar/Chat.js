@@ -3,7 +3,7 @@ import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../actions/activeConversationActions";
-import { setConversationAsSeen } from '../../actions/conversationActions'
+import { markConvoAsSeen } from '../../actions/thunkCreators'
 import { connect } from "react-redux";
 
 const styles = {
@@ -51,8 +51,8 @@ class Chat extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: ({otherUser, id}) => {
+      dispatch(markConvoAsSeen(id))
       dispatch(setActiveChat(otherUser.id));
-      dispatch(setConversationAsSeen(id))
     },
   };
 };

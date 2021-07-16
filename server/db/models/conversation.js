@@ -41,8 +41,11 @@ Conversation.createConversation = async function (senderId, recipientId) {
 
 Conversation.incrementUnseenCount = async function (conversationId) {
   try {
-    convo = await Conversation.increment('unseenCount', { by: 1, where: { id: conversationId }});
-    if (!convo) throw ('Error while Incrementing Conversation.');
+    const convo = await Conversation.increment('unseenCount', {
+       by: 1, where: { id: conversationId }
+    });
+    if (!convo) throw new Error('Error while Incrementing Conversation.');
+
     const updatedConvo =  await Conversation.findByPk(conversationId)
     return updatedConvo.toJSON();
   } catch(err) {
@@ -52,13 +55,15 @@ Conversation.incrementUnseenCount = async function (conversationId) {
 
 Conversation.resetUnseenCount = async function (conversationId) {
   try {
-    const convo = await Conversation.update({'unseenCount': 0},
-      {where: {id: conversationId}})
-      if (!convo) throw ('Error while Updating Conversation.');
+    const convo = await Conversation.update({'unseenCount': 0}, {
+      where: {id: conversationId}
+    })
+    if (!convo) throw new Error('Error while Updating Conversation.');
 
-      const updatedConvo =  await Conversation.findByPk(conversationId)
-      if(!updatedConvo) throw ('Error while Fetching Data');
-      return updatedConvo.toJSON();
+    const updatedConvo =  await Conversation.findByPk(conversationId)
+    if(!updatedConvo) throw new Error('Error while Fetching Data');
+    
+    return updatedConvo.toJSON();
   } catch(err) {
     console.log(err)
   }
