@@ -1,5 +1,6 @@
 import axios from "axios";
 import socket from "../socket";
+import {broadcastTypingAction} from "../socket";
 import {
   gotConversations,
   addConversation,
@@ -95,12 +96,14 @@ const sendMessage = (data, body) => {
 export const postMessage = (body) => async (dispatch) => {
   try {    
     const data = await saveMessage(body);
-    if (!body.conversationId) {
-      dispatch(addConversation(body.recipientId, data.message));
+    const {conversationId, recipientId} = body;
+    if (!conversationId) {
+      dispatch(addConversation(recipientId, data.message));
     } else {
       dispatch(setNewMessage(data.message));
     }
     sendMessage(data, body);
+    broadcastTypingAction(conversationId, recipientId, 'stoppedTyping');
   } catch (error) {
     console.error(error);
   }

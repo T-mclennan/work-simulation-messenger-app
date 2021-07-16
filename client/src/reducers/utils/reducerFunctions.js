@@ -121,3 +121,20 @@ export const addNewConvoToStore = (state, recipientId, message) => {
   });
 };
 
+export const turnOnTypingForConvo = (state, id) => {
+  return state.map((convo) => {
+    if (convo.id === id) {
+      return {...convo, isTyping: true}
+    }
+    return convo;
+  });
+}
+
+export const turnOffTypingForConvo = (state, id) => {
+  return state.map((convo) => {
+    if (convo.id === id) {
+      return {...convo, isTyping: false}
+    }
+    return convo;
+  });
+}

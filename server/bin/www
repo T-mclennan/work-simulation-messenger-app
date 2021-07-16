@@ -48,6 +48,16 @@ io.on("connection", (socket) => {
     });
   });
 
+  //Broadcasts user typing events - action can be 'isTyping' or 'stoppedTyping'.
+  socket.on("user-typing", (data) => {
+    const {convoId, recepientId, action } = data;
+    socket.broadcast.emit("user-is-typing", {
+      convoId,
+      recepientId,
+      action
+    });
+  });
+
   socket.on("logout", (id) => {
     if (onlineUsers.includes(id)) {
       userIndex = onlineUsers.indexOf(id);

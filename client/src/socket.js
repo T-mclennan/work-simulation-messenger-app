@@ -4,7 +4,8 @@ import {
   setNewMessage,
   removeOfflineUser,
   addOnlineUser,
-  incrementUnseenCountOfConvo
+  incrementUnseenCountOfConvo,
+  newTypingNotification
 } from "./actions/conversationActions";
 
 const socket = io(window.location.origin);
@@ -31,6 +32,22 @@ socket.on("connect", () => {
 
     store.dispatch(setNewMessage(message, sender));
   });
+
+  socket.on("user-is-typing", (data) => {
+    const { convoId, recepientId, action } = data;
+    const { user } = store.getState();
+    if (recepientId === user.id) {
+      store.dispatch(newTypingNotification(convoId, action));
+    }
+  });
 });
+
+//Broadcasts user typing events - action should be 'isTyping' or 'stoppedTyping'.
+export const broadcastTypingAction = (convoId, recepientId, action) => {
+  socket.emit("user-typing", {
+    convoId, recepientId, action
+  });
+}
+
 
 export default socket;

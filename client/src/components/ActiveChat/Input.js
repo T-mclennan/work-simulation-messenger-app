@@ -3,6 +3,7 @@ import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../actions/thunkCreators";
+import {broadcastTypingAction} from "../../socket"
 
 const styles = {
   root: {
@@ -17,6 +18,7 @@ const styles = {
   },
 };
 
+
 class Input extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +32,16 @@ class Input extends Component {
       text: event.target.value,
     });
   };
+
+  handleOnBlur = () => {
+    const {otherUser, conversationId} = this.props;
+    broadcastTypingAction(conversationId, otherUser.id, 'stoppedTyping')
+  }
+
+  handleOnFocus = () => {
+    const {otherUser, conversationId} = this.props;
+    broadcastTypingAction(conversationId, otherUser.id, 'isTyping')
+  }
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,6 +60,8 @@ class Input extends Component {
     });
   };
 
+  // broadcastTypingAction (convoId, recepientId, action) => {
+
   render() {
     const { classes } = this.props;
     return (
@@ -60,6 +74,8 @@ class Input extends Component {
             value={this.state.text}
             name="text"
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
+            onFocus={this.handleOnFocus}
           />
         </FormControl>
       </form>

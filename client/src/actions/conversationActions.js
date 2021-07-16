@@ -8,7 +8,9 @@ import {
   CLEAR_SEARCHED_USERS, 
   ADD_CONVERSATION,
   SET_CONVO_AS_SEEN,
-  INCREMENT_UNSEEN_COUNT
+  INCREMENT_UNSEEN_COUNT,
+  TURN_OFF_TYPING_NOTIFICATION,
+  TURN_ON_TYPING_NOTIFICATION
 } from './actionTypes'
 
 export const gotConversations = (conversations) => {
@@ -73,3 +75,22 @@ export const incrementUnseenCountOfConvo = (id) => {
     id,
   };
 };
+
+export const newTypingNotification = (convoId, action) => {
+  if (action === 'isTyping') return turnOnTypingNotification(convoId);
+  if (action === 'stoppedTyping') return turnOffTypingNotification(convoId);
+}
+
+export const turnOnTypingNotification = (id) => {
+  return {
+    type: TURN_OFF_TYPING_NOTIFICATION,
+    id
+  }
+}
+
+export const turnOffTypingNotification = (id) => {
+  return {
+    type: TURN_ON_TYPING_NOTIFICATION,
+    id
+  }
+}
