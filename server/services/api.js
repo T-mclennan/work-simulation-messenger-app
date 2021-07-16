@@ -30,6 +30,7 @@ composeConversationData = function(conversations) {
     // set properties for notification count and latest message preview
     const lastIndex = convoJSON.messages.length-1;
     convoJSON.latestMessageText = convoJSON.messages[lastIndex].text;
+    convoJSON.isTyping = false;
     newConvo[i] = convoJSON;
   }
 

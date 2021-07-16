@@ -31,7 +31,7 @@ class Chat extends Component {
   render() {
     const { classes, conversation } = this.props;
     const otherUser = conversation.otherUser;
-    const {unseenCount} = conversation;
+    // const {unseenCount} = conversation;
     return (
       <Box
         onClick={() => this.handleClick(conversation)}
@@ -44,9 +44,6 @@ class Chat extends Component {
           sidebar={true}
         />
         <ChatContent conversation={conversation} />
-        <Box className={classes.badge}>
-          <Badge badgeContent={unseenCount} color="primary" max={999} />
-        </Box>
       </Box>
     );
   }
