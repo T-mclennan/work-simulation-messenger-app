@@ -27,18 +27,9 @@ composeConversationData = function(conversations) {
       convoJSON.otherUser.online = false;
     }
 
-    let unseenCount = 0;
-    /****************   TODO: Update Counter logic  **************** */
-    // convoJSON.messages.forEach(message => {
-    //   if (message.unseenByUser === username) {
-    //     unseenCount++;
-    //   }
-    // })
-
     // set properties for notification count and latest message preview
     const lastIndex = convoJSON.messages.length-1;
     convoJSON.latestMessageText = convoJSON.messages[lastIndex].text;
-    convoJSON.unseenCount = unseenCount;
     newConvo[i] = convoJSON;
   }
 

@@ -39,9 +39,6 @@ class Input extends Component {
       recipientId: otherUser.id,
       conversationId: conversationId,
       sender: conversationId ? null : user,
-      senderUsername: user.username,
-      //When a message is first created, it hasn't yet been seen by the recipient
-      unseenByUser: otherUser.username
     };
 
     await postMessage(reqBody);

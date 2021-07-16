@@ -25,6 +25,20 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
+export const processConversations = (conversations) => {
+  //If the unseen messages were sent by this user, mark as seen:
+  const processedConvos = conversations.map((convo) => {
+    const {messages, otherUser} = convo;
+    const lastMessage = messages[messages.length-1];
+    if (lastMessage.senderId === otherUser.id) {
+      return convo;
+    } else {
+      return {...convo, unseenCount: 0}
+    }
+  })
+  return processedConvos;
+}
+
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {
@@ -49,11 +63,6 @@ export const removeOfflineUserFromStore = (state, id) => {
   });
 };
 
-// TODO: Set all messages in conversation as seen:
-export const setConversationAsSeenInStore = (state, payload) => {
-
-}
-
 export const addSearchedUsersToStore = (state, users) => {
   const currentUsers = {};
 
@@ -74,20 +83,28 @@ export const addSearchedUsersToStore = (state, users) => {
   return newState;
 };
 
-export const updateConversationAsSeen = (state, otherUsername) => {
-  return state.map((convo) => {
-    if (convo.otherUser.username === otherUsername) {
-      const {messages, unseenCount, ...rest} = convo;
-      const newMessages = messages.map((message) => {
-        const {unseenByUser, ...rest} = message;
-        return {...rest, unseenByUser: null}
-      })
-      const newConvo = {...rest, unseenCount: 0, messages: newMessages}
+export const updateConversationAsSeen = (state, id) => {
+  const newState = state.map((convo) => {
+    if (convo.id === id) {
+      const newConvo = {...convo, unseenCount: 0}
       return newConvo;
     } else {
       return convo;
     }
   })
+  return newState;
+}
+
+export const incrementUnseenCount = (state, id) => {
+  const newState = state.map((convo) => {
+    if (convo.id === id) {
+      const {unseenCount} = convo;
+      return {...convo, unseenCount: unseenCount+1};
+    } else {
+      return convo;
+    }
+  })
+  return newState;
 }
 
 export const addNewConvoToStore = (state, recipientId, message) => {
@@ -103,3 +120,4 @@ export const addNewConvoToStore = (state, recipientId, message) => {
     }
   });
 };
+

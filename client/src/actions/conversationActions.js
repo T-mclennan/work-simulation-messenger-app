@@ -7,7 +7,8 @@ import {
   SET_SEARCHED_USERS, 
   CLEAR_SEARCHED_USERS, 
   ADD_CONVERSATION,
-  SET_CONVO_AS_SEEN
+  SET_CONVO_AS_SEEN,
+  INCREMENT_UNSEEN_COUNT
 } from './actionTypes'
 
 export const gotConversations = (conversations) => {
@@ -59,9 +60,16 @@ export const addConversation = (recipientId, newMessage) => {
   };
 };
 
-export const setConversationAsSeen = (username) => {
+export const setConversationAsSeen = (id) => {
   return {
     type: SET_CONVO_AS_SEEN,
-    payload: { username }
+    id,
+  };
+};
+
+export const incrementUnseenCountOfConvo = (id) => {
+  return {
+    type: INCREMENT_UNSEEN_COUNT,
+    id,
   };
 };

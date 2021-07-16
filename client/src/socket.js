@@ -4,6 +4,7 @@ import {
   setNewMessage,
   removeOfflineUser,
   addOnlineUser,
+  incrementUnseenCountOfConvo
 } from "./actions/conversationActions";
 
 const socket = io(window.location.origin);
@@ -20,18 +21,13 @@ socket.on("connect", () => {
   });
 
   socket.on("new-message", (data) => {
-    const {message, sender, senderUsername} = data
-    const {activeConversation } = store.getState();
+    const { message, sender } = data
+    const { activeConversation } = store.getState();
 
-    if (message.unseenByUser){
-    //if incoming message is for current conversation, mark as seen
-      if (activeConversation === senderUsername) {
-        message.unseenByUser = null;
-        //TODO update database to reflect this change.
-      } else {
-        //TODO increment unseenCount for conversation
-      }
-    }
+    //if incoming message is not part of current conversation, mark as unseen.
+    if (activeConversation !== message.senderId) {
+      store.dispatch(incrementUnseenCountOfConvo(message.conversationId));
+    } 
 
     store.dispatch(setNewMessage(message, sender));
   });
