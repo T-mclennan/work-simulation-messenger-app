@@ -101,7 +101,6 @@ async function seed() {
     }),
     User.create({
       username: "julia",
-
       email: "julia@email.com",
       password: "123456",
       photoUrl:

@@ -108,7 +108,6 @@ export const postMessage = (body) => async (dispatch) => {
 
 export const markConvoAsSeen = (id) => async (dispatch) => {
   try {
-    // const { data } = await axios.post(`/api/conversations/viewed?id=${id}`);
     const { data } = await axios.post(`/api/conversations/viewed/${id}`);
 
     if (!data) {
