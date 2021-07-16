@@ -10,7 +10,7 @@ import {
   TextField,
   FormHelperText,
 } from "@material-ui/core";
-import { register } from "./store/utils/thunkCreators";
+import { register } from "../actions/thunkCreators";
 
 const Login = (props) => {
   const history = useHistory();
@@ -37,7 +37,7 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
+    <Grid container justifyContent="center">
       <Box>
         <Grid container item>
           <Typography>Need to log in?</Typography>

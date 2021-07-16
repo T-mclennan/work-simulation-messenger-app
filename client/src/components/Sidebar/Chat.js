@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
-import { setActiveChat } from "../../store/activeConversation";
+import { setActiveChat } from "../../actions/activeConversationActions";
 import { connect } from "react-redux";
 
 const styles = {

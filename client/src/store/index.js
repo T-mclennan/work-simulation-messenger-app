@@ -1,30 +1,19 @@
-import { createStore, applyMiddleware, combineReducers } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import loggerMiddleware from "redux-logger";
 import thunkMiddleware from "redux-thunk";
+import rootReducer from '../reducers'
 
-import user from "./user";
-import conversations from "./conversations";
-import activeConversation from "./activeConversation";
+const middleware = [thunkMiddleware, loggerMiddleware];
 
-const CLEAR_ON_LOGOUT = "CLEAR_ON_LOGOUT";
+const store = createStore(
+  rootReducer,
+  compose(
+    applyMiddleware(...middleware),
+    typeof window.__REDUX_DEVTOOLS_EXTENSION__ === "undefined"
+    ? a => a
+    : window.__REDUX_DEVTOOLS_EXTENSION__ &&
+        window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
+);
 
-export const clearOnLogout = () => {
-  return {
-    type: CLEAR_ON_LOGOUT
-  };
-};
-
-const appReducer = combineReducers({
-  user,
-  conversations,
-  activeConversation
-});
-const rootReducer = (state, action) => {
-  if (action.type === CLEAR_ON_LOGOUT) {
-    // set state to initial state
-    state = undefined;
-  }
-  return appReducer(state, action);
-};
-
-export default createStore(rootReducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
+export default store;

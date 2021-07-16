@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage } from "../../store/utils/thunkCreators";
+import { postMessage } from "../../actions/thunkCreators";
 
 const styles = {
   root: {
@@ -40,7 +40,9 @@ class Input extends Component {
       conversationId: this.props.conversationId,
       sender: this.props.conversationId ? null : this.props.user,
     };
+
     await this.props.postMessage(reqBody);
+
     this.setState({
       text: "",
     });
