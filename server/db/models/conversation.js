@@ -1,18 +1,12 @@
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
 const db = require("../db");
-<<<<<<< HEAD
 const Conversation = db.define("conversation", {
   unseenCount: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
 });
-=======
-
-
-const Conversation = db.define("conversation", {});
->>>>>>> develop
 
 Conversation.findConversation = async function (user1Id, user2Id) {
   const conversation = await Conversation.findOne({
@@ -30,10 +24,6 @@ Conversation.findConversation = async function (user1Id, user2Id) {
 
 Conversation.findConversationById = async function (conversationId) {
   const conversation = await Conversation.findByPk(conversationId)
-<<<<<<< HEAD
-  // return conversation or null if it doesn't exist
-=======
->>>>>>> develop
   return conversation;
 }
 
