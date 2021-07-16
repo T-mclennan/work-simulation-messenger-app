@@ -1,9 +1,22 @@
+/** Express router providing user related routes
+ * @module routers/api/users
+ */
+
 const router = require("express").Router();
 const { User } = require("../../db/models");
 const { Op } = require("sequelize");
 const onlineUsers = require("../../onlineUsers");
 
-// find users by username
+/**
+ * Route for fetching User data based on matching username.
+ * @name get/username
+ * @route GET /api/users/{username} 
+ * @param {string} username 
+ * @param {Object} user - Object of user data sent in header for validation
+ * @param {callback} middleware - Express middleware.
+ * @returns {Array} 200 - returns array of User objects
+ * @returns {Error}  401 
+ */
 router.get("/:username", async (req, res, next) => {
   try {
     if (!req.user) {

@@ -1,8 +1,23 @@
+/** Express router providing message related routes
+ * @module routers/api/messages
+ */
 const router = require("express").Router();
 const { Conversation, Message } = require("../../db/models");
 const onlineUsers = require("../../onlineUsers");
 
-// expects {recipientId, text, conversationId } in body (conversationId will be null if no conversation exists yet)
+
+/**
+ * Route for processing incoming messages.
+ * @name post/message
+ * @route POST /api/message/
+ * @param {number} recipientId - recipientId references the user the message is going to.
+ * @param {number} converstaionId - conversationId will be null if no conversation exists yet
+ * @param {string} text - Body of message.
+ * @param {Object} user - Object of user data sent in header for validation
+ * @param {Object} sender - If conversation doesn't exist, this will be object of sender info.
+ * @param {callback} middleware - Express middleware.
+ * @returns {Error}  401 - Validation error
+ */
 router.post("/", async (req, res, next) => {
   try {
     if (!req.user) {

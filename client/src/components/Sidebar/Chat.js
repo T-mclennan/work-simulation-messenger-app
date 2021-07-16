@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Box } from "@material-ui/core";
+import { Box, Badge } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../actions/activeConversationActions";
@@ -18,6 +18,9 @@ const styles = {
       cursor: "grab",
     },
   },
+  badge: {
+    paddingRight: 35,
+  }
 };
 
 class Chat extends Component {
@@ -41,8 +44,9 @@ class Chat extends Component {
           sidebar={true}
         />
         <ChatContent conversation={conversation} />
-
-        {unseenCount > 0 && <h3>{unseenCount}</h3>}
+        <Box className={classes.badge}>
+          <Badge badgeContent={unseenCount} color="primary" max={999} />
+        </Box>
       </Box>
     );
   }
@@ -51,7 +55,7 @@ class Chat extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: ({otherUser, id}) => {
-      dispatch(markConvoAsSeen(id))
+      id && dispatch(markConvoAsSeen(id))
       dispatch(setActiveChat(otherUser.id));
     },
   };
