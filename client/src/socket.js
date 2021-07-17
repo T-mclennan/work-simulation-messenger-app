@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import store from "./store";
+import { v4 as uuidv4 } from 'uuid';
 import {
   setNewMessage,
   removeOfflineUser,
@@ -8,7 +9,13 @@ import {
   newTypingNotification
 } from "./actions/conversationActions";
 
-const socket = io(window.location.origin);
+let socketId = localStorage.getItem("socket-id");
+if (!socketId) {
+  socketId = uuidv4()
+  localStorage.setItem("socket-id", socketId);
+}
+
+const socket = io(window.location.origin, {query: {socketId}});
 
 socket.on("connect", () => {
   console.log("connected to server");
