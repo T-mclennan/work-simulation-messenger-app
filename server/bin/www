@@ -11,6 +11,7 @@ const { app, sessionStore } = require("../app");
 const http = require("http");
 const db = require("../db");
 const onlineUsers = require("../onlineUsers");
+const {validateSocket} = require('./../middleware/validateUser')
 
 /**
  * Get port from environment and store in Express.
@@ -30,10 +31,16 @@ const server = http.createServer(app);
  */
 const io = require("socket.io")(server);
 
+
+//Authentication middleware for socket.io
+require('socketio-auth')(io, {
+  authenticate: validateSocket
+});
+
 io.on("connection", (socket) => {
 
   //Create a private room for each user denoted by socketId. 
-  const socketId = socket.handshake.query.socketId;
+  const {socketId, token} = socket.handshake.query;
   socket.join(socketId);
 
   // onlineUsers is a Map - {id: socketId}

@@ -24,4 +24,21 @@ validateUser = function () {
   }
 }
 
-module.exports = validateUser;
+/** validateSocket is validation middleware for the websocket.*/
+validateSocket = function (socket, data, callback) {
+  const token = data.token;
+  if (token) {
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+      if (err) {
+        return callback(new Error(err));;
+      }
+      User.findOne({
+        where: { id: decoded.id },
+      }).then(callback(null, true));
+    });
+  } else {
+    return callback(new Error("User not found"));
+  }
+}
+
+module.exports = {validateUser, validateSocket};
