@@ -12,16 +12,12 @@ import {
   makeStyles
 } from "@material-ui/core";
 import AuthLayout from "../components/Layout/AuthLayout";
+import {useAuthStyles} from "../themes/theme";
 import { register } from "../actions/thunkCreators";
-
-
-const useStyles = makeStyles((theme) => ({
-  
-}))
 
 const Login = (props) => {
 
-  const styles = useStyles();
+  const classes = useAuthStyles();
   const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
@@ -47,17 +43,25 @@ const Login = (props) => {
 
   return (
     <AuthLayout>
-      <Grid item xs={12} sm={7} md={8}>
-        <Box>
-          <Grid container item alignItems="center">
-            <Typography>Already have an account?</Typography>
-            <Button onClick={() => history.push("/login")}>Login</Button>
-          </Grid>
-          <form onSubmit={handleRegister}>
-            <Grid>
-              <Grid>
-                <FormControl>
+      <Grid item xs={12} sm={7} md={7}>
+        <Box className={classes.pageContainer}>
+          <Box className={classes.headerBox}>
+            <Typography className={classes.accentText}>Already have an account?</Typography>
+            <Button className={classes.navButton} onClick={() => history.push("/login")}>
+              Login
+            </Button>
+          </Box>
+          <Box className={classes.contentBox}>
+            <Box>
+              <Typography style={{fontWeight: "bold", fontSize: 30}}>
+                Create an account.
+              </Typography>
+            </Box>
+            <form onSubmit={handleRegister}>
+              <Grid style={{margin: 1}}>
+                <FormControl fullWidth>
                   <TextField
+                    fullWidth
                     aria-label="username"
                     label="Username"
                     name="username"
@@ -65,10 +69,9 @@ const Login = (props) => {
                     required
                   />
                 </FormControl>
-              </Grid>
-              <Grid>
-                <FormControl>
+                <FormControl fullWidth>
                   <TextField
+                    fullWidth
                     label="E-mail address"
                     aria-label="e-mail address"
                     type="email"
@@ -76,10 +79,9 @@ const Login = (props) => {
                     required
                   />
                 </FormControl>
-              </Grid>
-              <Grid>
-                <FormControl error={!!formErrorMessage.confirmPassword}>
+                <FormControl error={!!formErrorMessage.confirmPassword} fullWidth>
                   <TextField
+                    fullWidth
                     aria-label="password"
                     label="Password"
                     type="password"
@@ -91,10 +93,9 @@ const Login = (props) => {
                     {formErrorMessage.confirmPassword}
                   </FormHelperText>
                 </FormControl>
-              </Grid>
-              <Grid>
-                <FormControl error={!!formErrorMessage.confirmPassword}>
+                <FormControl error={!!formErrorMessage.confirmPassword} fullWidth>
                   <TextField
+                    fullWidth
                     label="Confirm Password"
                     aria-label="confirm password"
                     type="password"
@@ -106,12 +107,14 @@ const Login = (props) => {
                     {formErrorMessage.confirmPassword}
                   </FormHelperText>
                 </FormControl>
+                <Box textAlign='center'>
+                  <Button type="submit" variant="contained" className={classes.actionButton}>
+                      <strong>Login</strong>
+                  </Button>
+                </Box>
               </Grid>
-              <Button type="submit" variant="contained" size="large">
-                Create
-              </Button>
-            </Grid>
-          </form>
+            </form>
+          </Box>
         </Box>
       </Grid>
     </AuthLayout>

@@ -7,24 +7,21 @@ import {
   Button,
   FormControl,
   TextField,
-  makeStyles
+  Box
 } from "@material-ui/core";
 import AuthLayout from "../components/Layout/AuthLayout";
+import {useAuthStyles} from '../themes/theme';
 import { login } from "../actions/thunkCreators";
-
-const useStyles = makeStyles((theme) => ({
-
-}))
 
 const Login = (props) => {
   const history = useHistory();
+  const classes = useAuthStyles();
   const { user, login } = props;
 
   const handleLogin = async (event) => {
     event.preventDefault();
     const username = event.target.username.value;
     const password = event.target.password.value;
-
     await login({ username, password });
   };
 
@@ -34,42 +31,49 @@ const Login = (props) => {
 
   return (
     <AuthLayout>
-      <Grid item xs={12} sm={7} md={8}>
-        <Grid container alignItems="center" justifyContent="center">
-          <Grid container alignItems="center" justifyContent="center">
-            <Typography>Need to register?</Typography>
-            <Button onClick={() => history.push("/register")}>Register</Button>
-          </Grid>
-          <Grid container alignItems="center" justifyContent="center" marginTop={10}>
+      <Grid item xs={12} sm={7} md={7}>
+        <Box className={classes.pageContainer}>
+          <Box className={classes.headerBox}>
+            <Typography className={classes.accentText}>Don't have an account?</Typography>
+            <Button className={classes.navButton} onClick={() => history.push("/register")}>
+              Create Account
+            </Button>
+          </Box>
+          <Box className={classes.contentBox}>
+            <Box>
+              <Typography style={{fontWeight: "bold", fontSize: 30}}>
+                Welcome Back!
+              </Typography>
+            </Box>
             <form onSubmit={handleLogin}>
-              <Grid>
-                <Grid>
-                  <FormControl margin="normal" required>
-                    <TextField
-                      aria-label="username"
-                      label="Username"
-                      name="username"
-                      type="text"
-                    />
-                  </FormControl>
-                </Grid>
-                <FormControl margin="normal" required>
+              <Grid style={{margin: 1}}>
+                <FormControl margin="normal" fullWidth required>
+                  <Typography className={classes.accentText}>username</Typography>
                   <TextField
-                    label="password"
+                    fullWidth
+                    aria-label="username"
+                    name="username"
+                    type="text"
+                  />
+                </FormControl>
+                <FormControl margin="normal" fullWidth required>
+                  <Typography className={classes.accentText}>password</Typography>
+                  <TextField
+                    fullWIdth
                     aria-label="password"
                     type="password"
                     name="password"
                   />
                 </FormControl>
-                <Grid >
-                  <Button type="submit" variant="contained" size="large">
-                    Login
+                <Box textAlign='center'>
+                  <Button type="submit" variant="contained" className={classes.actionButton}>
+                      <strong>Login</strong>
                   </Button>
-                </Grid>
+                </Box>
               </Grid>
             </form>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Grid>
     </AuthLayout>
   );
