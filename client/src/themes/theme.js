@@ -62,7 +62,6 @@ export const useAuthStyles = makeStyles((theme) => ({
     transition: 'all 0.2s linear',
     fontSize: 16,
     fontWeight: "bold",
-    marginTop: 60,
     boxShadow: '0 2px 20px 0 rgba(88, 133, 196, 0.2)',
     '&:hover': {
       backgroundColor: 'rgba(148, 9, 69, 0.8)',
@@ -82,7 +81,6 @@ export const useAuthStyles = makeStyles((theme) => ({
   contentBox: {
     width: '80%',
     maxWidth: 450,
-    marginTop: 90,
     display: 'flex',
     flexDirection: "column",
     justifyContent: "center",

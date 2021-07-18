@@ -39,33 +39,37 @@ const Login = (props) => {
               Create Account
             </Button>
           </Box>
-          <Box className={classes.contentBox}>
+          <Box className={classes.contentBox} mt={8}>
             <Box>
               <Typography style={{fontWeight: "bold", fontSize: 30}}>
                 Welcome Back!
               </Typography>
             </Box>
             <form onSubmit={handleLogin}>
-              <Grid style={{margin: 1}}>
-                <FormControl margin="normal" fullWidth required>
-                  <Typography className={classes.accentText}>username</Typography>
-                  <TextField
-                    fullWidth
-                    aria-label="username"
-                    name="username"
-                    type="text"
-                  />
-                </FormControl>
-                <FormControl margin="normal" fullWidth required>
-                  <Typography className={classes.accentText}>password</Typography>
-                  <TextField
-                    fullWIdth
-                    aria-label="password"
-                    type="password"
-                    name="password"
-                  />
-                </FormControl>
-                <Box textAlign='center'>
+              <Grid >
+                <Box my={1}>
+                  <FormControl margin="normal" fullWidth required>
+                    <TextField
+                      fullWidth
+                      label="Username"
+                      aria-label="username"
+                      name="username"
+                      type="text"
+                    />
+                  </FormControl>
+                </Box>
+                <Box my={2}>
+                  <FormControl margin="normal" fullWidth required>
+                    <TextField
+                      fullWIdth
+                      label="Password"
+                      aria-label="password"
+                      type="password"
+                      name="password"
+                    />
+                  </FormControl>
+                </Box>
+                <Box mt={12.75} textAlign='center'>
                   <Button type="submit" variant="contained" className={classes.actionButton}>
                       <strong>Login</strong>
                   </Button>

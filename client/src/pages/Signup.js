@@ -9,7 +9,6 @@ import {
   FormControl,
   TextField,
   FormHelperText,
-  makeStyles
 } from "@material-ui/core";
 import AuthLayout from "../components/Layout/AuthLayout";
 import {useAuthStyles} from "../themes/theme";
@@ -51,65 +50,73 @@ const Login = (props) => {
               Login
             </Button>
           </Box>
-          <Box className={classes.contentBox}>
+          <Box className={classes.contentBox} mt={8}>
             <Box>
               <Typography style={{fontWeight: "bold", fontSize: 30}}>
                 Create an account.
               </Typography>
             </Box>
             <form onSubmit={handleRegister}>
-              <Grid style={{margin: 1}}>
-                <FormControl fullWidth>
-                  <TextField
-                    fullWidth
-                    aria-label="username"
-                    label="Username"
-                    name="username"
-                    type="text"
-                    required
-                  />
-                </FormControl>
-                <FormControl fullWidth>
-                  <TextField
-                    fullWidth
-                    label="E-mail address"
-                    aria-label="e-mail address"
-                    type="email"
-                    name="email"
-                    required
-                  />
-                </FormControl>
-                <FormControl error={!!formErrorMessage.confirmPassword} fullWidth>
-                  <TextField
-                    fullWidth
-                    aria-label="password"
-                    label="Password"
-                    type="password"
-                    inputProps={{ minLength: 6 }}
-                    name="password"
-                    required
-                  />
-                  <FormHelperText>
-                    {formErrorMessage.confirmPassword}
-                  </FormHelperText>
-                </FormControl>
-                <FormControl error={!!formErrorMessage.confirmPassword} fullWidth>
-                  <TextField
-                    fullWidth
-                    label="Confirm Password"
-                    aria-label="confirm password"
-                    type="password"
-                    inputProps={{ minLength: 6 }}
-                    name="confirmPassword"
-                    required
-                  />
-                  <FormHelperText>
-                    {formErrorMessage.confirmPassword}
-                  </FormHelperText>
-                </FormControl>
-                <Box textAlign='center'>
+              <Grid >
+                <Box my={1}>
+                  <FormControl fullWidth>
+                    <TextField
+                      fullWidth
+                      aria-label="username"
+                      label="Username"
+                      name="username"
+                      type="text"
+                      required
+                    />
+                  </FormControl>
+                </Box>
+                <Box my={1}>
+                  <FormControl fullWidth>
+                    <TextField
+                      fullWidth
+                      label="E-mail address"
+                      aria-label="e-mail address"
+                      type="email"
+                      name="email"
+                      required
+                    />
+                  </FormControl>
+                </Box>
+                <Box my={1}>
+                  <FormControl error={!!formErrorMessage.confirmPassword} fullWidth>
+                    <TextField
+                      fullWidth
+                      aria-label="password"
+                      label="Password"
+                      type="password"
+                      inputProps={{ minLength: 6 }}
+                      name="password"
+                      required
+                    />
+                    <FormHelperText>
+                      {formErrorMessage.confirmPassword}
+                    </FormHelperText>
+                  </FormControl>
+                </Box>
+                <Box my={1}>
+                  <FormControl error={!!formErrorMessage.confirmPassword} fullWidth>
+                    <TextField
+                      fullWidth
+                      label="Confirm Password"
+                      aria-label="confirm password"
+                      type="password"
+                      inputProps={{ minLength: 6 }}
+                      name="confirmPassword"
+                      required
+                    />
+                    <FormHelperText>
+                      {formErrorMessage.confirmPassword}
+                    </FormHelperText>
+                  </FormControl>
+                </Box>
+                <Box mt={5} textAlign='center'>
                   <Button type="submit" variant="contained" className={classes.actionButton}>
-                      <strong>Login</strong>
+                      <strong>Create</strong>
                   </Button>
                 </Box>
               </Grid>
