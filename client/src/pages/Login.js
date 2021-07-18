@@ -3,13 +3,18 @@ import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
   Typography,
   Button,
   FormControl,
   TextField,
+  makeStyles
 } from "@material-ui/core";
+import AuthLayout from "../components/Layout/AuthLayout";
 import { login } from "../actions/thunkCreators";
+
+const useStyles = makeStyles((theme) => ({
+
+}))
 
 const Login = (props) => {
   const history = useHistory();
@@ -28,41 +33,45 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
-        </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
-            <Grid>
-              <FormControl margin="normal" required>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                />
-              </FormControl>
-            </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
-              </Button>
-            </Grid>
+    <AuthLayout>
+      <Grid item xs={12} sm={7} md={8}>
+        <Grid container alignItems="center" justifyContent="center">
+          <Grid container alignItems="center" justifyContent="center">
+            <Typography>Need to register?</Typography>
+            <Button onClick={() => history.push("/register")}>Register</Button>
           </Grid>
-        </form>
-      </Box>
-    </Grid>
+          <Grid container alignItems="center" justifyContent="center" marginTop={10}>
+            <form onSubmit={handleLogin}>
+              <Grid>
+                <Grid>
+                  <FormControl margin="normal" required>
+                    <TextField
+                      aria-label="username"
+                      label="Username"
+                      name="username"
+                      type="text"
+                    />
+                  </FormControl>
+                </Grid>
+                <FormControl margin="normal" required>
+                  <TextField
+                    label="password"
+                    aria-label="password"
+                    type="password"
+                    name="password"
+                  />
+                </FormControl>
+                <Grid >
+                  <Button type="submit" variant="contained" size="large">
+                    Login
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
+        </Grid>
+      </Grid>
+    </AuthLayout>
   );
 };
 
