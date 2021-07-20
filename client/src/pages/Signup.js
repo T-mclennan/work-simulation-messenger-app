@@ -52,7 +52,7 @@ const Login = (props) => {
           </Box>
           <Box className={classes.contentBox} mt={8}>
             <Box>
-              <Typography style={{fontWeight: "bold", fontSize: 30}}>
+              <Typography className={classes.boldStatementText}>
                 Create an account.
               </Typography>
             </Box>

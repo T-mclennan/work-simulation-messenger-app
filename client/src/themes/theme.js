@@ -41,6 +41,11 @@ export const useAuthStyles = makeStyles((theme) => ({
     color: 'rgb(189, 189, 189)',
   },
 
+  boldStatementText: {
+    fontWeight: "bold", 
+    fontSize: 30
+  },
+
   navButton: {
     width: '10rem',
     height: '3.5rem',
