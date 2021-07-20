@@ -45,7 +45,7 @@ export const useAuthStyles = makeStyles((theme) => ({
     width: '10rem',
     height: '3.5rem',
     marginLeft: '3rem',
-    color: '#3A8DFF',
+    color: theme.palette.primary.main,
     boxShadow: '0 2px 20px 0 rgba(88, 133, 196, 0.2)',
     transition: 'all 0.3s linear',
     '&:hover': {
