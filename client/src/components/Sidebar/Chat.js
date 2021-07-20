@@ -55,7 +55,8 @@ class Chat extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: ({otherUser, id}) => {
-      id && dispatch(markConvoAsSeen(id))
+      const sender = otherUser.id;
+      id && dispatch(markConvoAsSeen(sender, id))
       dispatch(setActiveChat(otherUser.id));
     },
   };

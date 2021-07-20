@@ -35,17 +35,42 @@ router.get("/", async (req, res, next) => {
  * @name post/conversation/viewed:id
  * @route POST /api/conversation/viewed:id
  * @param {number} id - id of given Conversation
+ * @param {string} sender - Name of sender of unseen messages. Used in validation.
  * @param {Object} user - Object of user data sent in header for validation
  * @param {callback} middleware - Express middleware.
  * @returns {object} 200 - success
  * @returns {Error}  401 - Validation error
+ * @returns {Error}  403 - Forbidden error
  */
-router.post("/viewed/:id", async (req, res, next) => {
+router.patch("/viewed/:id/:sender", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
     }
-    const updatedConvo = await Conversation.resetUnseenCount(req.params.id)
+    const userId = req.user.id;
+    const senderId = req.params.sender;
+    console.log(`userId: ${userId}`);
+
+    //Knowing the sender of the unseens messages we can determine who the recipient is, and
+    //verify that is the same user found in the request header. 
+    const conversation = await Conversation.findConversationById(req.params.id);
+    console.log(conversation)
+
+    let targetUser = null;
+    if (conversation.user1Id == senderId) {
+      targetUser = conversation.user2Id;
+      console.log(`targetUser: ${targetUser}`)
+    } else if (conversation.user2Id === senderId) {
+       targetUser = conversation.user1Id;
+    }
+
+    console.log(`user1: ${conversation.user1Id}`)
+    console.log(`user2: ${conversation.user2Id}`)
+    console.log(`senderId: ${senderId}`);
+    console.log(`targetUser: ${targetUser}`)
+    if (targetUser !== userId) return res.sendStatus(403);
+
+    const updatedConvo = await Conversation.resetUnseenCount(req.params.id);
     if(!updatedConvo) throw ('Error while Fetching Data');
     res.sendStatus(200);
   } catch (error) {
