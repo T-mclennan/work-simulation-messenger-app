@@ -24,17 +24,18 @@ const styles = {
 };
 
 class Chat extends Component {
-  handleClick = async (conversation) => {
-    await this.props.setActiveChat(conversation);
+  handleClick = async (conversation, userId, messageId) => {
+    await this.props.setActiveChat(conversation, userId, messageId);
   };
 
   render() {
-    const { classes, conversation } = this.props;
+    const { classes, conversation, userId } = this.props;
+    const lastMessage = conversation.messages[conversation.messages.length - 1];
     const otherUser = conversation.otherUser;
     const {unseenCount} = conversation;
     return (
       <Box
-        onClick={() => this.handleClick(conversation)}
+        onClick={() => this.handleClick(conversation, userId, lastMessage.id)}
         className={classes.root}
       >
         <BadgeAvatar
@@ -54,12 +55,17 @@ class Chat extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setActiveChat: ({otherUser, id}) => {
-      const sender = otherUser.id;
-      id && dispatch(markConvoAsSeen(sender, id))
+    setActiveChat: ({otherUser, id}, userId, messageId) => {
+      id && dispatch(markConvoAsSeen(userId, id, messageId, otherUser.id))
       dispatch(setActiveChat(otherUser.id));
     },
   };
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Chat));
+const mapStateToProps = (state) => {
+  return {
+    userId: state.user.id
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Chat));

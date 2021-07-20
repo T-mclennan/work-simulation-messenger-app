@@ -7,6 +7,7 @@ import {
   updateConversationAsSeen,
   processConversations,
   incrementUnseenCount,
+  setLastMessageRead
 } from "./utils/reducerFunctions";
 
 import { 
@@ -18,7 +19,8 @@ import {
   CLEAR_SEARCHED_USERS, 
   ADD_CONVERSATION,
   SET_CONVO_AS_SEEN,
-  INCREMENT_UNSEEN_COUNT
+  INCREMENT_UNSEEN_COUNT,
+  SET_LAST_MESSAGE_READ
 } from '../actions/actionTypes'
 
 const conversationReducer = (state = [], action) => {
@@ -47,6 +49,8 @@ const conversationReducer = (state = [], action) => {
       return updateConversationAsSeen(state, action.id);
     case INCREMENT_UNSEEN_COUNT:
       return incrementUnseenCount(state, action.id)
+    case SET_LAST_MESSAGE_READ:
+        return setLastMessageRead(state, action.payload)
     default:
       return state;
   }

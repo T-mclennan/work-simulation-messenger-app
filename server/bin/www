@@ -48,6 +48,14 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("message-seen", (data) => {
+    const { convoId, messageId, recipientId } = data;
+    console.log("Message seen: ", messageId)
+    socket.broadcast.emit("message-seen", {
+      convoId, messageId, recipientId
+    });
+  });
+
   socket.on("logout", (id) => {
     if (onlineUsers.includes(id)) {
       userIndex = onlineUsers.indexOf(id);

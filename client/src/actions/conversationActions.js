@@ -8,7 +8,8 @@ import {
   CLEAR_SEARCHED_USERS, 
   ADD_CONVERSATION,
   SET_CONVO_AS_SEEN,
-  INCREMENT_UNSEEN_COUNT
+  INCREMENT_UNSEEN_COUNT,
+  SET_LAST_MESSAGE_READ
 } from './actionTypes'
 
 export const gotConversations = (conversations) => {
@@ -73,3 +74,10 @@ export const incrementUnseenCountOfConvo = (id) => {
     id,
   };
 };
+
+export const setMessageReadInConvo = (messageId, convoId) => {
+  return {
+    type: SET_LAST_MESSAGE_READ,
+    payload: { messageId, convoId }
+  }
+}

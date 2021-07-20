@@ -16,7 +16,7 @@ findConversationsByUserId = async function(userId) {
           user2Id: userId,
         },
       },
-      attributes: ["id", "unseenCount"],
+      attributes: ["id", "unseenCount", "lastMessageReadUser1", "lastMessageReadUser2"],
       order: [[Message, "createdAt", "ASC"]],
       include: [
         { model: Message, order: ["createdAt", "ASC"] },

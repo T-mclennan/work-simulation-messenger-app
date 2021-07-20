@@ -42,29 +42,30 @@ router.get("/", async (req, res, next) => {
  * @returns {Error}  401 - Validation error
  * @returns {Error}  403 - Forbidden error
  */
-router.patch("/viewed/:id/:sender", async (req, res, next) => {
+router.patch("/viewed/:id/:userId/:messageId", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
     }
-    const userId = req.user.id;
-    const senderId = req.params.sender;
 
-    //Knowing the sender of the unseens messages we can determine who the recipient is, and
-    //verify that is the same user found in the request header. 
-    const conversation = await Conversation.findConversationById(req.params.id);
- 
-    let targetUser = null;
-    if (conversation.user1Id == senderId) {
-      targetUser = conversation.user2Id;
-    } else if (conversation.user2Id == senderId) {
-       targetUser = conversation.user1Id;
-    }
-    if (targetUser !== userId) return res.sendStatus(403);
+    // userId is the recipient of the unseen message. Given this we can verify that
+    // this action is authorized by comparing it to userId found in the request header. 
+    const authId = req.user.id;
+    const userId = req.params.userId;
+    if (authId != userId) return res.sendStatus(403);
 
-    const updatedConvo = await Conversation.resetUnseenCount(req.params.id);
-    if(!updatedConvo) throw ('Error while Fetching Data');
-    res.sendStatus(200);
+    const id = req.params.id
+    const messageId = req.params.messageId
+
+    const resetConvo = await Conversation.resetUnseenCount(id);
+    if(!resetConvo) throw ('Error while resetting unseen count of conversation.');
+
+    const updatedConvo = await Conversation.setLastUnseenMessageForUser(
+      id, userId, messageId
+    );
+    if(!updatedConvo) throw ('Error while setting last message of user.');
+
+    return res.sendStatus(200);
   } catch (error) {
     next(error);
   }

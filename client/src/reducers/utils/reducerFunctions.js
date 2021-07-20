@@ -121,3 +121,13 @@ export const addNewConvoToStore = (state, recipientId, message) => {
   });
 };
 
+export const setLastMessageRead = (state, {messageId, convoId}) => {
+  const newState = state.map((convo) => {
+    if (convo.id === convoId) {
+      return {...convo, lastMessageReadId: messageId};
+    } else {
+      return convo;
+    }
+  })
+  return newState;
+}

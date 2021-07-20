@@ -8,6 +8,7 @@ import {
   setConversationAsSeen
 } from "../actions/conversationActions";
 import { gotUser, setFetchingStatus } from "./userActions";
+import {broadcastMessageSeen} from '../socket';
 
 axios.interceptors.request.use(async function (config) {
   const token = await localStorage.getItem("messenger-token");
@@ -93,7 +94,7 @@ const sendMessage = (data, body) => {
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
-  try {    
+  try {
     const data = await saveMessage(body);
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
@@ -106,18 +107,30 @@ export const postMessage = (body) => async (dispatch) => {
   }
 };
 
-export const markConvoAsSeen = (sender, id) => async (dispatch) => {
+export const markConvoAsSeen = (userId, id, messageId, recipientId) => async (dispatch) => {
   try {
-    const { data } = await axios.patch(`/api/conversations/viewed/${id}/${sender}`);
-
+    const { data } = await axios.patch(`/api/conversations/viewed/${id}/${userId}/${messageId}`);
+    
     if (!data) {
       throw new Error(`Server request failed.`)
     }
     dispatch(setConversationAsSeen(id));
+    broadcastMessageSeen(id, messageId, recipientId)
   } catch (error) {
     console.error(error);
   }
 };
+
+// export const updateLastSeenByUser = (id, userId, messageId) => async (dispatch) => {
+//   try {
+//     const { data } = await axios.patch(`/api/conversations/lastSeen/${id}/${userId}/${messageId}`);
+//     if (!data) {
+//       throw new Error(`Server request failed.`)
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {

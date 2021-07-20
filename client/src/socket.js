@@ -4,7 +4,8 @@ import {
   setNewMessage,
   removeOfflineUser,
   addOnlineUser,
-  incrementUnseenCountOfConvo
+  incrementUnseenCountOfConvo,
+  setMessageReadInConvo
 } from "./actions/conversationActions";
 
 const socket = io(window.location.origin);
@@ -31,6 +32,22 @@ socket.on("connect", () => {
 
     store.dispatch(setNewMessage(message, sender));
   });
+
+  socket.on("message-seen", (data) => {
+    const { user } = store.getState();
+    const { convoId, messageId, recipientId } = data
+    if (user.id === recipientId) {
+      store.dispatch(setMessageReadInConvo(convoId, messageId));
+    }
+  });
 });
+
+//Broadcasts message seen event.
+export const broadcastMessageSeen = (convoId, messageId, recipientId) => {
+  socket.emit("message-seen", {
+    convoId, messageId, recipientId
+  });
+}
+
 
 export default socket;

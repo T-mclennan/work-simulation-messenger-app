@@ -6,6 +6,14 @@ const Conversation = db.define("conversation", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  lastMessageReadUser1: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+  },
+  lastMessageReadUser2: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+  }
 });
 
 Conversation.findConversation = async function (user1Id, user2Id) {
@@ -27,13 +35,15 @@ Conversation.findConversationById = async function (conversationId) {
   return conversation;
 }
 
-Conversation.createConversation = async function (senderId, recipientId) {
+Conversation.createConversation = async function (senderId, recipientId ) {
   if (isNaN(senderId) || isNaN(recipientId)) {
     throw new Error("Error: Conversation could not be created. Two valid user Id's are needed.")
   }
   conversation = await Conversation.create({
     user1Id: senderId,
     user2Id: recipientId,
+    lastMessageReadUser1: null,
+    lastMessageReadUser2: null,
     unseenCount: 0,
   });
   return conversation;
@@ -64,6 +74,30 @@ Conversation.resetUnseenCount = async function (conversationId) {
     if(!updatedConvo) throw new Error('Error while Fetching Data');
     
     return updatedConvo.toJSON();
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+Conversation.setLastUnseenMessageForUser = async function (conversationId, userId, messageId) {
+  try {
+    const conversation =  await Conversation.findByPk(conversationId)
+    if (userId == conversation.user1Id) {
+      await Conversation.update({'lastMessageReadUser1': parseInt(messageId)}, {
+        where: {id: conversationId}
+      })
+    } else if (userId == conversation.user2Id) {
+      await Conversation.update({'lastMessageReadUser2': parseInt(messageId)}, {
+        where: {id: conversationId}
+      })
+    } else {
+      throw new Error('Error: userId not found in conversation.');
+    }
+    
+    const updatedConvo =  await Conversation.findByPk(conversationId)
+    if(!updatedConvo) throw new Error('Error while Fetching Data');
+
+    return updatedConvo;
   } catch(err) {
     console.log(err)
   }
