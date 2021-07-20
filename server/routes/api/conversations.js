@@ -1,6 +1,7 @@
 /** Express router providing conversation related routes
  * @module routers/api/conversation
- */const router = require("express").Router();
+ */
+const router = require("express").Router();
 
 const {Conversation} = require("../../db/models")
 const {findConversationByUserId} = require("../../db/queries")
