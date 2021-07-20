@@ -22,10 +22,10 @@ socket.on("connect", () => {
 
   socket.on("new-message", (data) => {
     const { message, sender } = data
-    const { activeConversation } = store.getState();
+    const { activeConversationUserId } = store.getState();
 
     //if incoming message is not part of current conversation, mark as unseen.
-    if (activeConversation !== message.senderId) {
+    if (activeConversationUserId !== message.senderId) {
       store.dispatch(incrementUnseenCountOfConvo(message.conversationId));
     } 
 

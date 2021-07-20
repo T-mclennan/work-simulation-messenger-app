@@ -1,7 +1,6 @@
 /** Express router providing conversation related routes
  * @module routers/api/conversation
- */
-const router = require("express").Router();
+ */const router = require("express").Router();
 
 const {Conversation} = require("../../db/models")
 const {findConversationByUserId} = require("../../db/queries")
@@ -50,25 +49,17 @@ router.patch("/viewed/:id/:sender", async (req, res, next) => {
     }
     const userId = req.user.id;
     const senderId = req.params.sender;
-    console.log(`userId: ${userId}`);
 
     //Knowing the sender of the unseens messages we can determine who the recipient is, and
     //verify that is the same user found in the request header. 
     const conversation = await Conversation.findConversationById(req.params.id);
-    console.log(conversation)
-
+ 
     let targetUser = null;
     if (conversation.user1Id == senderId) {
       targetUser = conversation.user2Id;
-      console.log(`targetUser: ${targetUser}`)
-    } else if (conversation.user2Id === senderId) {
+    } else if (conversation.user2Id == senderId) {
        targetUser = conversation.user1Id;
     }
-
-    console.log(`user1: ${conversation.user1Id}`)
-    console.log(`user2: ${conversation.user2Id}`)
-    console.log(`senderId: ${senderId}`);
-    console.log(`targetUser: ${targetUser}`)
     if (targetUser !== userId) return res.sendStatus(403);
 
     const updatedConvo = await Conversation.resetUnseenCount(req.params.id);
