@@ -1,7 +1,24 @@
+/** Express router providing auth related routes
+ * @module routers/auth/
+ */
 const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
 
+
+/**
+ * Route for User registration service.
+ * @name post/register
+ * @route POST /auth/register 
+ * @param {string} username 
+ * @param {string} password 
+ * @param {string} email 
+ * @param {Object} user - Object of user data sent in header for validation
+ * @param {callback} middleware - Express middleware.
+ * @returns {Object} 200 - Returns Object of user related data
+ * @returns {Error}  401 - Validation error
+ * @returns {Error}  400 - "Username, password, and email required"
+ */
 router.post("/register", async (req, res, next) => {
   try {
     // expects {username, email, password} in req.body
@@ -39,6 +56,18 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+/**
+ * Route for User authentication service.
+ * @name post/login
+ * @route POST /auth/login 
+ * @param {string} username 
+ * @param {string} password 
+ * @param {Object} user - Object of user data sent in header for validation
+ * @param {callback} middleware - Express middleware.
+ * @returns {Object} 200 - Returns Object of user related data
+ * @returns {Error}  401 - Wrong username and/or password
+ * @returns {Error}  400 - "Username, password, and email required"
+ */
 router.post("/login", async (req, res, next) => {
   try {
     // expects username and password in req.body
@@ -74,10 +103,22 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+/**
+ * Route for User logout service.
+ * @name delete/logout
+ * @route DELETE /auth/logout 
+ * @returns 204 
+ */
 router.delete("/logout", (req, res, next) => {
   res.sendStatus(204);
 });
 
+/**
+ * Route for fetching current User.
+ * @name get/user
+ * @route GET /auth/user 
+ * @param {Object} - If user exists returns Object of user data
+ */
 router.get("/user", (req, res, next) => {
   if (req.user) {
     return res.json(req.user);

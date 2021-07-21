@@ -1,10 +1,12 @@
 import axios from "axios";
 import socket from "../socket";
+import {broadcastTypingAction} from "../socket";
 import {
   gotConversations,
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  setConversationAsSeen
 } from "../actions/conversationActions";
 import { gotUser, setFetchingStatus } from "./userActions";
 
@@ -16,7 +18,6 @@ axios.interceptors.request.use(async function (config) {
 });
 
 // USER THUNK CREATORS
-
 export const fetchUser = () => async (dispatch) => {
   dispatch(setFetchingStatus(true));
   try {
@@ -68,7 +69,6 @@ export const logout = (id) => async (dispatch) => {
 };
 
 // CONVERSATIONS THUNK CREATORS
-
 export const fetchConversations = () => async (dispatch) => {
   try {
     const { data } = await axios.get("/api/conversations");
@@ -94,15 +94,29 @@ const sendMessage = (data, body) => {
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
-  try {
+  try {    
     const data = await saveMessage(body);
-    if (!body.conversationId) {
-      dispatch(addConversation(body.recipientId, data.message));
+    const {conversationId, recipientId} = body;
+    if (!conversationId) {
+      dispatch(addConversation(recipientId, data.message));
     } else {
       dispatch(setNewMessage(data.message));
     }
-
     sendMessage(data, body);
+    broadcastTypingAction(conversationId, recipientId, 'stoppedTyping');
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const markConvoAsSeen = (id) => async (dispatch) => {
+  try {
+    const { data } = await axios.patch(`/api/conversations/viewed/${id}`);
+
+    if (!data) {
+      throw new Error(`Server request failed.`)
+    }
+    dispatch(setConversationAsSeen(id));
   } catch (error) {
     console.error(error);
   }

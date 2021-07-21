@@ -21,14 +21,16 @@ composeConversationData = function(conversations) {
     }
 
     // set property for online status of the other user
-    if (onlineUsers.includes(convoJSON.otherUser.id)) {
+    if (onlineUsers.has(convoJSON.otherUser.id)) {
       convoJSON.otherUser.online = true;
     } else {
       convoJSON.otherUser.online = false;
     }
 
     // set properties for notification count and latest message preview
-    convoJSON.latestMessageText = convoJSON.messages[convoJSON.messages.length-1].text;
+    const lastIndex = convoJSON.messages.length-1;
+    convoJSON.latestMessageText = convoJSON.messages[lastIndex].text;
+    convoJSON.isTyping = false;
     newConvo[i] = convoJSON;
   }
 

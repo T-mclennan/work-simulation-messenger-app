@@ -4,6 +4,11 @@ import {
   addSearchedUsersToStore,
   removeOfflineUserFromStore,
   addMessageToStore,
+  updateConversationAsSeen,
+  processConversations,
+  incrementUnseenCount,
+  turnOffTypingForConvo,
+  turnOnTypingForConvo
 } from "./utils/reducerFunctions";
 
 import { 
@@ -13,13 +18,17 @@ import {
   REMOVE_OFFLINE_USER, 
   SET_SEARCHED_USERS, 
   CLEAR_SEARCHED_USERS, 
-  ADD_CONVERSATION
+  ADD_CONVERSATION,
+  SET_CONVO_AS_SEEN,
+  INCREMENT_UNSEEN_COUNT, 
+  TURN_OFF_TYPING_NOTIFICATION,
+  TURN_ON_TYPING_NOTIFICATION,
 } from '../actions/actionTypes'
 
 const conversationReducer = (state = [], action) => {
   switch (action.type) {
     case GET_CONVERSATIONS:
-      return action.conversations;
+      return processConversations(action.conversations);
     case SET_MESSAGE:
       return addMessageToStore(state, action.payload);
     case ADD_ONLINE_USER: {
@@ -38,6 +47,17 @@ const conversationReducer = (state = [], action) => {
         action.payload.recipientId,
         action.payload.newMessage
       );
+    case SET_CONVO_AS_SEEN:
+      return updateConversationAsSeen(state, action.id);
+    case INCREMENT_UNSEEN_COUNT:
+      return incrementUnseenCount(state, action.id)
+
+    case TURN_ON_TYPING_NOTIFICATION:
+      return turnOffTypingForConvo(state, action.id);
+
+    case TURN_OFF_TYPING_NOTIFICATION:
+      return turnOnTypingForConvo(state, action.id);
+
     default:
       return state;
   }

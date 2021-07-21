@@ -6,7 +6,11 @@ import {
   REMOVE_OFFLINE_USER, 
   SET_SEARCHED_USERS, 
   CLEAR_SEARCHED_USERS, 
-  ADD_CONVERSATION
+  ADD_CONVERSATION,
+  SET_CONVO_AS_SEEN,
+  INCREMENT_UNSEEN_COUNT,
+  TURN_OFF_TYPING_NOTIFICATION,
+  TURN_ON_TYPING_NOTIFICATION
 } from './actionTypes'
 
 export const gotConversations = (conversations) => {
@@ -57,3 +61,36 @@ export const addConversation = (recipientId, newMessage) => {
     payload: { recipientId, newMessage },
   };
 };
+
+export const setConversationAsSeen = (id) => {
+  return {
+    type: SET_CONVO_AS_SEEN,
+    id,
+  };
+};
+
+export const incrementUnseenCountOfConvo = (id) => {
+  return {
+    type: INCREMENT_UNSEEN_COUNT,
+    id,
+  };
+};
+
+export const newTypingNotification = (convoId, action) => {
+  if (action === 'isTyping') return turnOnTypingNotification(convoId);
+  if (action === 'stoppedTyping') return turnOffTypingNotification(convoId);
+}
+
+export const turnOnTypingNotification = (id) => {
+  return {
+    type: TURN_OFF_TYPING_NOTIFICATION,
+    id
+  }
+}
+
+export const turnOffTypingNotification = (id) => {
+  return {
+    type: TURN_ON_TYPING_NOTIFICATION,
+    id
+  }
+}

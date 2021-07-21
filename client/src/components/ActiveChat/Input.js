@@ -3,6 +3,7 @@ import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../actions/thunkCreators";
+import {broadcastTypingAction} from "../../socket"
 
 const styles = {
   root: {
@@ -16,6 +17,7 @@ const styles = {
     marginBottom: 20,
   },
 };
+
 
 class Input extends Component {
   constructor(props) {
@@ -31,22 +33,34 @@ class Input extends Component {
     });
   };
 
+  handleOnBlur = () => {
+    const {otherUser, conversationId} = this.props;
+    broadcastTypingAction(conversationId, otherUser.id, 'stoppedTyping')
+  }
+
+  handleOnFocus = () => {
+    const {otherUser, conversationId} = this.props;
+    broadcastTypingAction(conversationId, otherUser.id, 'isTyping')
+  }
+
   handleSubmit = async (event) => {
     event.preventDefault();
-    // add sender user info if posting to a brand new convo, so that the other user will have access to username, profile pic, etc.
+    const {otherUser, conversationId, user, postMessage} = this.props;
     const reqBody = {
       text: event.target.text.value,
-      recipientId: this.props.otherUser.id,
-      conversationId: this.props.conversationId,
-      sender: this.props.conversationId ? null : this.props.user,
+      recipientId: otherUser.id,
+      conversationId: conversationId,
+      sender: conversationId ? null : user,
     };
 
-    await this.props.postMessage(reqBody);
+    await postMessage(reqBody);
 
     this.setState({
       text: "",
     });
   };
+
+  // broadcastTypingAction (convoId, recepientId, action) => {
 
   render() {
     const { classes } = this.props;
@@ -60,6 +74,8 @@ class Input extends Component {
             value={this.state.text}
             name="text"
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
+            onFocus={this.handleOnFocus}
           />
         </FormControl>
       </form>

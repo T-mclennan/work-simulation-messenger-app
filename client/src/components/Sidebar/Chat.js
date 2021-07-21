@@ -3,6 +3,7 @@ import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../actions/activeConversationActions";
+import { markConvoAsSeen } from '../../actions/thunkCreators'
 import { connect } from "react-redux";
 
 const styles = {
@@ -17,19 +18,22 @@ const styles = {
       cursor: "grab",
     },
   },
+  badge: {
+    paddingRight: 35,
+  }
 };
 
 class Chat extends Component {
   handleClick = async (conversation) => {
-    await this.props.setActiveChat(conversation.otherUser.username);
+    await this.props.setActiveChat(conversation);
   };
 
   render() {
-    const { classes } = this.props;
-    const otherUser = this.props.conversation.otherUser;
+    const { classes, conversation } = this.props;
+    const otherUser = conversation.otherUser;
     return (
       <Box
-        onClick={() => this.handleClick(this.props.conversation)}
+        onClick={() => this.handleClick(conversation)}
         className={classes.root}
       >
         <BadgeAvatar
@@ -38,7 +42,7 @@ class Chat extends Component {
           online={otherUser.online}
           sidebar={true}
         />
-        <ChatContent conversation={this.props.conversation} />
+        <ChatContent conversation={conversation} />
       </Box>
     );
   }
@@ -46,8 +50,9 @@ class Chat extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setActiveChat: (id) => {
-      dispatch(setActiveChat(id));
+    setActiveChat: ({otherUser, id}) => {
+      id && dispatch(markConvoAsSeen(id))
+      dispatch(setActiveChat(otherUser.id));
     },
   };
 };

@@ -1,8 +1,8 @@
 import {SET_ACTIVE_CHAT} from './actionTypes'
 
-export const setActiveChat = (username) => {
+export const setActiveChat = (userId) => {
   return {
     type: SET_ACTIVE_CHAT,
-    username
+    userId
   };
 };

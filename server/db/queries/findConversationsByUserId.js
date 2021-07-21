@@ -16,7 +16,7 @@ findConversationsByUserId = async function(userId) {
           user2Id: userId,
         },
       },
-      attributes: ["id"],
+      attributes: ["id", "unseenCount"],
       order: [[Message, "createdAt", "ASC"]],
       include: [
         { model: Message, order: ["createdAt", "ASC"] },
@@ -42,6 +42,7 @@ findConversationsByUserId = async function(userId) {
           attributes: ["id", "username", "photoUrl"],
           required: false,
         },
+
       ],
     });
 
