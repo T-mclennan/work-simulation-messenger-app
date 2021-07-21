@@ -1,7 +1,6 @@
 /** Express router providing auth related routes
  * @module routers/auth/
  */
- const { v4: uuidv4 } = require('uuid');
 const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
@@ -56,21 +55,6 @@ router.post("/register", async (req, res, next) => {
     } else next(error);
   }
 });
-
-/**
- * Route for UUID used as socketId - used as authentication for websockets.
- * @name get/auth/socketId
- * @route GET /auth/socketId
- * @returns {string} - returns a strong id
- */
- router.get("/socketId", (req, res, next) => {
-    try {
-      const socketId = uuidv4();
-      res.json(socketId);
-    } catch (error) {
-      next(error);
-    }
-  });
 
 /**
  * Route for User authentication service.

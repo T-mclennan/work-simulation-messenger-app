@@ -1,7 +1,5 @@
 import io from "socket.io-client";
 import store from "./store";
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
 import {
   setNewMessage,
   removeOfflineUser,
@@ -10,20 +8,9 @@ import {
   newTypingNotification
 } from "./actions/conversationActions";
 
-let socketId = localStorage.getItem("socket-id");
-let token = localStorage.getItem("token");
+const token = localStorage.getItem("messenger-token");
+const socket = io(window.location.origin);
 
-const prepareSocket = async () => {
-  const { data } = await axios.get(`/auth/socketId`);
-  await localStorage.setItem("socket-id", data);
-  return data;
-}
-
-if (!socketId) {
-  socketId = prepareSocket()
-}
-
-const socket = io(window.location.origin, {query: {socketId}});
 
 socket.on("connect", () => {
 
@@ -34,8 +21,6 @@ socket.on("connect", () => {
   });
   
   socket.on('authenticated', function() {
-    
-    console.log("connected to server");
 
     socket.on("add-online-user", (id) => {
       store.dispatch(addOnlineUser(id));

@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const { app, sessionStore } = require("../app");
 const http = require("http");
+const { v4: uuidv4 } = require('uuid');
 const db = require("../db");
 const onlineUsers = require("../onlineUsers");
 const {validateSocket} = require('./../middleware/validateUser')
@@ -37,14 +38,15 @@ require('socketio-auth')(io, {
   authenticate: validateSocket
 });
 
+
 io.on("connection", (socket) => {
-
+  
   //Create a private room for each user denoted by socketId. 
-  const {socketId, token} = socket.handshake.query;
+  const socketId = uuidv4();
   socket.join(socketId);
-
-  // onlineUsers is a Map - {id: socketId}
+  
   socket.on("go-online", (id) => {
+  // onlineUsers is a Map - {id: socketId}
     onlineUsers.set(id, socketId)
 
     // send the user who just went online to everyone else who is already online
