@@ -32,15 +32,15 @@ router.get("/", async (req, res, next) => {
 
 /**
  * Route for resetting unseen message counter for the conversation by id.
- * @name post/conversation/viewed:id
- * @route POST /api/conversation/viewed:id
+ * @name patch/conversation/viewed:id
+ * @route PATCH /api/conversation/viewed:id
  * @param {number} id - id of given Conversation
  * @param {Object} user - Object of user data sent in header for validation
  * @param {callback} middleware - Express middleware.
  * @returns {object} 200 - success
  * @returns {Error}  401 - Validation error
  */
-router.post("/viewed/:id", async (req, res, next) => {
+router.patch("/viewed/:id", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);

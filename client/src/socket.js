@@ -1,6 +1,7 @@
 import io from "socket.io-client";
 import store from "./store";
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 import {
   setNewMessage,
   removeOfflineUser,
@@ -12,9 +13,14 @@ import {
 let socketId = localStorage.getItem("socket-id");
 let token = localStorage.getItem("token");
 
+const prepareSocket = async () => {
+  const { data } = await axios.get(`/auth/socketId`);
+  await localStorage.setItem("socket-id", data);
+  return data;
+}
+
 if (!socketId) {
-  socketId = uuidv4()
-  localStorage.setItem("socket-id", socketId);
+  socketId = prepareSocket()
 }
 
 const socket = io(window.location.origin, {query: {socketId}});

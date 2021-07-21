@@ -111,7 +111,7 @@ export const postMessage = (body) => async (dispatch) => {
 
 export const markConvoAsSeen = (id) => async (dispatch) => {
   try {
-    const { data } = await axios.post(`/api/conversations/viewed/${id}`);
+    const { data } = await axios.patch(`/api/conversations/viewed/${id}`);
 
     if (!data) {
       throw new Error(`Server request failed.`)
