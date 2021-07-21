@@ -7,7 +7,7 @@ import {
   incrementUnseenCountOfConvo,
   setMessageReadInConvo
 } from "./actions/conversationActions";
-import { setIncomingMessageAsLastSeen } from "./actions/thunkCreators"
+import { updateLastSeenExternally } from "./actions/thunkCreators"
 const socket = io(window.location.origin);
 
 socket.on("connect", () => {
@@ -23,31 +23,31 @@ socket.on("connect", () => {
 
   socket.on("new-message", (data) => {
     const { message, sender } = data
-    const { activeConversationUserId, user } = store.getState();
+    const { activeConversationUserId} = store.getState();
     const {id, conversationId, senderId} = message;
     //if incoming message is not part of current conversation, mark as unseen.
-    //If it is, mark as last message seen in store, database, and notify through websocket.
+    //If it is, mark as last message seen in database, and notify through websocket.
     if (activeConversationUserId !== message.senderId) {
       store.dispatch(incrementUnseenCountOfConvo(message.conversationId));
     } else {
-      store.dispatch(setIncomingMessageAsLastSeen(user.id, conversationId, id, senderId));
+      store.dispatch(updateLastSeenExternally(senderId, conversationId, id));
     }
     store.dispatch(setNewMessage(message, sender));
   });
 
   socket.on("message-seen", (data) => {
     const { user } = store.getState();
-    const { convoId, messageId, recipientId } = data
-    if (user.id === recipientId) {
+    const { convoId, messageId, senderId } = data
+    if (user.id === senderId) {
       store.dispatch(setMessageReadInConvo(convoId, messageId));
     }
   });
 });
 
 //Broadcasts message seen event.
-export const broadcastMessageSeen = (convoId, messageId, recipientId) => {
+export const broadcastMessageSeen = (convoId, messageId, senderId) => {
   socket.emit("message-seen", {
-    convoId, messageId, recipientId
+    convoId, messageId, senderId
   });
 }
 

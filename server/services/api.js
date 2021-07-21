@@ -12,12 +12,13 @@ composeConversationData = function(conversations) {
     const convoJSON = convo.toJSON();
     // set properties "otherUser" and "lastMessageReadId" so that frontend
     // will have easier access.
+
     if (convoJSON.user1) {
       convoJSON.otherUser = convoJSON.user1;
-      convoJSON.lastMessageReadId = convoJSON.lastMessageReadUser1;
+      convoJSON.lastMessageReadId = convoJSON.lastMessageReadUser2;
     } else if (convoJSON.user2) {
       convoJSON.otherUser = convoJSON.user2;
-      convoJSON.lastMessageReadId = convoJSON.lastMessageReadUser2;
+      convoJSON.lastMessageReadId = convoJSON.lastMessageReadUser1;
     }
     delete convoJSON.user1;
     delete convoJSON.lastMessageReadUser1;

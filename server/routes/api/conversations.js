@@ -32,17 +32,17 @@ router.get("/", async (req, res, next) => {
 
 /**
  * Route for resetting unseen message counter for the conversation by id.
- * @name post/conversation/viewed:id
- * @route POST /api/conversation/viewed:id
+ * @name patch/conversation/viewed/:id/:userId
+ * @route PATCH /api/conversation/viewed/:id/:userId
  * @param {number} id - id of given Conversation
- * @param {string} sender - Name of sender of unseen messages. Used in validation.
+ * @param {string} senderId - id of user who is resetting unseenCount
  * @param {Object} user - Object of user data sent in header for validation
  * @param {callback} middleware - Express middleware.
  * @returns {object} 200 - success
  * @returns {Error}  401 - Validation error
  * @returns {Error}  403 - Forbidden error
  */
-router.patch("/viewed/:id/:userId/:messageId", async (req, res, next) => {
+router.patch("/viewed/:id/:senderId", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
@@ -51,17 +51,48 @@ router.patch("/viewed/:id/:userId/:messageId", async (req, res, next) => {
     // userId is the recipient of the unseen message. Given this we can verify that
     // this action is authorized by comparing it to userId found in the request header. 
     const authId = req.user.id;
-    const userId = req.params.userId;
-    if (authId != userId) return res.sendStatus(403);
-
+    const senderId = req.params.senderId;
     const id = req.params.id
+    if (!checkValidUserAccess(id, senderId, authId)) return res.sendStatus(403);
+
+    await Conversation.resetUnseenCount(id);
+    return res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * Route for updating the last seen message for the conversation by a particular user. 
+ * Saves this information for use by the message sender. 
+ * @name patch/conversation/markSeen/:id/:senderId/:messageId
+ * @route PATCH /markSeen/:id/:senderId/:messageId"
+ * @param {number} id - id of given Conversation
+ * @param {number} senderId - Name of sender of unseen messages. Used in validation.
+ * @param {number} messageId - id of the message.
+ * @param {Object} user - Object of user data sent in header for validation
+ * @param {callback} middleware - Express middleware.
+ * @returns {object} 200 - success
+ * @returns {Error}  401 - Validation error
+ * @returns {Error}  403 - Forbidden error
+ */
+ router.patch("/markSeen/:id/:senderId/:messageId", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
+    // userId is the recipient of the unseen message. Given this we can verify that
+    // this action is authorized by comparing it to userId found in the request header. 
+    const authId = req.user.id;
+    const senderId = req.params.senderId;
+    const id = req.params.id
+
+    if (!checkValidUserAccess(id, senderId, authId)) return res.sendStatus(403);
+
     const messageId = req.params.messageId
-
-    const resetConvo = await Conversation.resetUnseenCount(id);
-    if(!resetConvo) throw ('Error while resetting unseen count of conversation.');
-
     const updatedConvo = await Conversation.setLastUnseenMessageForUser(
-      id, userId, messageId
+      id, senderId, messageId
     );
     if(!updatedConvo) throw ('Error while setting last message of user.');
 
@@ -70,5 +101,17 @@ router.patch("/viewed/:id/:userId/:messageId", async (req, res, next) => {
     next(error);
   }
 });
+
+const checkValidUserAccess = async (convoId, senderId, authId) => {
+  const convo = await Conversation.findConversationById(convoId);
+  let targetUser;
+  if (convo.user1Id === senderId) {
+    targetUser = convo.user2Id;
+  } else if (convo.user2Id === senderId) {
+    targetUser = convo.user1Id
+  } else return false;
+
+  return targetUser == authId;
+}
 
 module.exports = router;

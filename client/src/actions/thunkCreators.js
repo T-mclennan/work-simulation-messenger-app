@@ -6,7 +6,6 @@ import {
   setNewMessage,
   setSearchedUsers,
   setConversationAsSeen,
-  setMessageReadInConvo
 } from "../actions/conversationActions";
 import { gotUser, setFetchingStatus } from "./userActions";
 import {broadcastMessageSeen} from '../socket';
@@ -108,29 +107,28 @@ export const postMessage = (body) => async (dispatch) => {
   }
 };
 
-export const markConvoAsSeen = (userId, id, messageId, recipientId) => async (dispatch) => {
+export const markConvoAsSeen = (id, messageId, senderId) => async (dispatch) => {
   try {
-    const { data } = await axios.patch(`/api/conversations/viewed/${id}/${userId}/${messageId}`);
+    const { data } = await axios.patch(`/api/conversations/viewed/${id}/${senderId}/`);
     
     if (!data) {
       throw new Error(`Server request failed.`)
     }
     dispatch(setConversationAsSeen(id));
-    broadcastMessageSeen(id, messageId, recipientId)
+    broadcastMessageSeen(id, messageId, senderId)
   } catch (error) {
     console.error(error);
   }
 };
 
-export const setIncomingMessageAsLastSeen = (userId, id, messageId, recipientId) => async (dispatch) => {
+//This function broadcasts the last message seen, saves updates to database. 
+export const updateLastSeenExternally = (senderId, id, messageId) => async (dispatch) => {
   try {
-    const { data } = await axios.patch(`/api/conversations/viewed/${id}/${userId}/${messageId}`);
-    
+    const { data } = await axios.patch(`/api/conversations/markSeen/${id}/${senderId}/${messageId}`);
     if (!data) {
       throw new Error(`Server request failed.`)
     }
-    dispatch(setMessageReadInConvo(messageId,id));
-    broadcastMessageSeen(id, messageId, recipientId)
+    broadcastMessageSeen(id, messageId, senderId)
   } catch (error) {
     console.error(error);
   }

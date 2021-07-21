@@ -79,14 +79,14 @@ Conversation.resetUnseenCount = async function (conversationId) {
   }
 }
 
-Conversation.setLastUnseenMessageForUser = async function (conversationId, userId, messageId) {
+Conversation.setLastUnseenMessageForUser = async function (conversationId, senderId, messageId) {
   try {
     const conversation =  await Conversation.findByPk(conversationId)
-    if (userId == conversation.user1Id) {
+    if (senderId == conversation.user1Id) {
       await Conversation.update({'lastMessageReadUser1': parseInt(messageId)}, {
         where: {id: conversationId}
       })
-    } else if (userId == conversation.user2Id) {
+    } else if (senderId == conversation.user2Id) {
       await Conversation.update({'lastMessageReadUser2': parseInt(messageId)}, {
         where: {id: conversationId}
       })
