@@ -5,7 +5,8 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
-  setConversationAsSeen
+  setConversationAsSeen,
+  setMessageReadInConvo
 } from "../actions/conversationActions";
 import { gotUser, setFetchingStatus } from "./userActions";
 import {broadcastMessageSeen} from '../socket';
@@ -121,16 +122,19 @@ export const markConvoAsSeen = (userId, id, messageId, recipientId) => async (di
   }
 };
 
-// export const updateLastSeenByUser = (id, userId, messageId) => async (dispatch) => {
-//   try {
-//     const { data } = await axios.patch(`/api/conversations/lastSeen/${id}/${userId}/${messageId}`);
-//     if (!data) {
-//       throw new Error(`Server request failed.`)
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+export const setIncomingMessageAsLastSeen = (userId, id, messageId, recipientId) => async (dispatch) => {
+  try {
+    const { data } = await axios.patch(`/api/conversations/viewed/${id}/${userId}/${messageId}`);
+    
+    if (!data) {
+      throw new Error(`Server request failed.`)
+    }
+    dispatch(setMessageReadInConvo(messageId,id));
+    broadcastMessageSeen(id, messageId, recipientId)
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {

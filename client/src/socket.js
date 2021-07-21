@@ -7,7 +7,7 @@ import {
   incrementUnseenCountOfConvo,
   setMessageReadInConvo
 } from "./actions/conversationActions";
-
+import { setIncomingMessageAsLastSeen } from "./actions/thunkCreators"
 const socket = io(window.location.origin);
 
 socket.on("connect", () => {
@@ -23,13 +23,15 @@ socket.on("connect", () => {
 
   socket.on("new-message", (data) => {
     const { message, sender } = data
-    const { activeConversationUserId } = store.getState();
-
+    const { activeConversationUserId, user } = store.getState();
+    const {id, conversationId, senderId} = message;
     //if incoming message is not part of current conversation, mark as unseen.
+    //If it is, mark as last message seen in store, database, and notify through websocket.
     if (activeConversationUserId !== message.senderId) {
       store.dispatch(incrementUnseenCountOfConvo(message.conversationId));
-    } 
-
+    } else {
+      store.dispatch(setIncomingMessageAsLastSeen(user.id, conversationId, id, senderId));
+    }
     store.dispatch(setNewMessage(message, sender));
   });
 
