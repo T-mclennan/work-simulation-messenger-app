@@ -12,7 +12,6 @@ composeConversationData = function(conversations) {
     const convoJSON = convo.toJSON();
     // set properties "otherUser" and "lastMessageReadId" so that frontend
     // will have easier access.
-
     if (convoJSON.user1) {
       convoJSON.otherUser = convoJSON.user1;
       convoJSON.lastMessageReadId = convoJSON.lastMessageReadUser2;
@@ -20,6 +19,7 @@ composeConversationData = function(conversations) {
       convoJSON.otherUser = convoJSON.user2;
       convoJSON.lastMessageReadId = convoJSON.lastMessageReadUser1;
     }
+
     delete convoJSON.user1;
     delete convoJSON.lastMessageReadUser1;
     delete convoJSON.user2;
@@ -34,7 +34,7 @@ composeConversationData = function(conversations) {
 
     // set properties for notification count and latest message preview
     const lastIndex = convoJSON.messages.length-1;
-    convoJSON.latestMessageText = convoJSON.messages[lastIndex].text;
+    convoJSON.latestMessageText = lastIndex >= 0 ? convoJSON.messages[lastIndex].text : '';
     newConvo[i] = convoJSON;
   }
   return newConvo;

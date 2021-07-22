@@ -30,12 +30,13 @@ class Chat extends Component {
 
   render() {
     const { classes, conversation } = this.props;
-    const lastMessage = conversation.messages[conversation.messages.length - 1];
+    const length = conversation.messages.length;
+    const lastMessageId = length > 0 ? conversation.messages[length - 1].id : null;
     const otherUser = conversation.otherUser;
     const {unseenCount} = conversation;
     return (
       <Box
-        onClick={() => this.handleClick(conversation, lastMessage.id || null)}
+        onClick={() => this.handleClick(conversation, lastMessageId)}
         className={classes.root}
       >
         <BadgeAvatar

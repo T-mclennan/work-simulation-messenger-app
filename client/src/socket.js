@@ -39,7 +39,8 @@ socket.on("connect", () => {
     const { user } = store.getState();
     const { convoId, messageId, senderId } = data
     if (user.id === senderId) {
-      store.dispatch(setMessageReadInConvo(convoId, messageId));
+      store.dispatch(setMessageReadInConvo(messageId, convoId));
+      
     }
   });
 });
