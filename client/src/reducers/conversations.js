@@ -7,6 +7,7 @@ import {
   updateConversationAsSeen,
   processConversations,
   incrementUnseenCount,
+  setLastMessageRead,
   turnOffTypingForConvo,
   turnOnTypingForConvo
 } from "./utils/reducerFunctions";
@@ -20,6 +21,7 @@ import {
   CLEAR_SEARCHED_USERS, 
   ADD_CONVERSATION,
   SET_CONVO_AS_SEEN,
+  SET_LAST_MESSAGE_READ,
   INCREMENT_UNSEEN_COUNT, 
   TURN_OFF_TYPING_NOTIFICATION,
   TURN_ON_TYPING_NOTIFICATION,
@@ -51,10 +53,10 @@ const conversationReducer = (state = [], action) => {
       return updateConversationAsSeen(state, action.id);
     case INCREMENT_UNSEEN_COUNT:
       return incrementUnseenCount(state, action.id)
-
+    case SET_LAST_MESSAGE_READ:
+        return setLastMessageRead(state, action.payload)
     case TURN_ON_TYPING_NOTIFICATION:
       return turnOffTypingForConvo(state, action.id);
-
     case TURN_OFF_TYPING_NOTIFICATION:
       return turnOnTypingForConvo(state, action.id);
 

@@ -30,7 +30,7 @@ export const processConversations = (conversations) => {
   const processedConvos = conversations.map((convo) => {
     const {messages, otherUser} = convo;
     const lastMessage = messages[messages.length-1];
-    if (lastMessage.senderId === otherUser.id) {
+    if (lastMessage && lastMessage.senderId === otherUser.id) {
       return convo;
     } else {
       return {...convo, unseenCount: 0}
@@ -121,6 +121,15 @@ export const addNewConvoToStore = (state, recipientId, message) => {
   });
 };
 
+export const setLastMessageRead = (state, {messageId, convoId}) => {
+  const newState = state.map((convo) => {
+    if (convo.id === convoId) {
+      return {...convo, lastMessageReadId: messageId};
+    } else {
+      return convo;
+    }
+  })
+  return newState;
 export const turnOnTypingForConvo = (state, id) => {
   return state.map((convo) => {
     if (convo.id === id) {

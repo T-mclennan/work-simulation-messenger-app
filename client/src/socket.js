@@ -5,8 +5,10 @@ import {
   removeOfflineUser,
   addOnlineUser,
   incrementUnseenCountOfConvo,
+  setMessageReadInConvo, 
   newTypingNotification
 } from "./actions/conversationActions";
+import { updateLastSeenExternally } from "./actions/thunkCreators"
 
 const token = localStorage.getItem("messenger-token");
 const socket = io(window.location.origin);
@@ -49,6 +51,29 @@ socket.on("connect", () => {
         store.dispatch(newTypingNotification(convoId, action));
       }
     });
+
+    socket.on("new-message", (data) => {
+      const { message, sender } = data
+      const { activeConversationUserId} = store.getState();
+      const {id, conversationId, senderId} = message;
+      //if incoming message is not part of current conversation, mark as unseen.
+      //If it is, mark as last message seen in database, and notify through websocket.
+      if (activeConversationUserId !== message.senderId) {
+        store.dispatch(incrementUnseenCountOfConvo(message.conversationId));
+      } else {
+        store.dispatch(updateLastSeenExternally(senderId, conversationId, id));
+      }
+      store.dispatch(setNewMessage(message, sender));
+    });
+
+    socket.on("message-seen", (data) => {
+      const { user } = store.getState();
+      const { convoId, messageId, senderId } = data
+      if (user.id === senderId) {
+        store.dispatch(setMessageReadInConvo(messageId, convoId));
+
+      }
+    });
   });
 });
 
@@ -56,6 +81,14 @@ socket.on("connect", () => {
 export const broadcastTypingAction = (convoId, recepientId, action) => {
   socket.emit("user-typing", {
     convoId, recepientId, action
+  });
+}
+
+
+//Broadcasts message seen event.
+export const broadcastMessageSeen = (convoId, messageId, senderId) => {
+  socket.emit("message-seen", {
+    convoId, messageId, senderId
   });
 }
 
