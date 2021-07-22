@@ -37,7 +37,7 @@ router.post("/", async (req, res, next) => {
       //if no conversation exists, create a new one
       if (!conversation) {
         conversation = await Conversation.createConversation(senderId, recipientId);
-        if (onlineUsers.includes(sender.id)) {
+        if (onlineUsers.has(sender.id)) {
           sender.online = true;
         }
       }

@@ -9,7 +9,9 @@ import {
   ADD_CONVERSATION,
   SET_CONVO_AS_SEEN,
   INCREMENT_UNSEEN_COUNT,
-  SET_LAST_MESSAGE_READ
+  SET_LAST_MESSAGE_READ,
+  TURN_OFF_TYPING_NOTIFICATION,
+  TURN_ON_TYPING_NOTIFICATION
 } from './actionTypes'
 
 export const gotConversations = (conversations) => {
@@ -75,10 +77,26 @@ export const incrementUnseenCountOfConvo = (id) => {
   };
 };
 
-//OUT OF ORDER!!
 export const setMessageReadInConvo = (messageId, convoId) => {
   return {
     type: SET_LAST_MESSAGE_READ,
     payload: { messageId, convoId }
+
+export const newTypingNotification = (convoId, action) => {
+  if (action === 'isTyping') return turnOnTypingNotification(convoId);
+  if (action === 'stoppedTyping') return turnOffTypingNotification(convoId);
+}
+
+export const turnOnTypingNotification = (id) => {
+  return {
+    type: TURN_OFF_TYPING_NOTIFICATION,
+    id
+  }
+}
+
+export const turnOffTypingNotification = (id) => {
+  return {
+    type: TURN_ON_TYPING_NOTIFICATION,
+    id
   }
 }

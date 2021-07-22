@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography, Badge } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -18,11 +18,17 @@ const useStyles = makeStyles((theme) => ({
     color: "#9CADC8",
     letterSpacing: -0.17,
   },
+  italicText: {
+    fontStyle: "italic",
+    fontSize: 12,
+    color: "#9CADC8",
+    letterSpacing: -0.17,
+  },
   notification: {
     height: 20,
     width: 20,
     backgroundColor: "#3F92FF",
-    marginRight: 10,
+    marginRight: 20,
     color: "white",
     fontSize: 10,
     letterSpacing: -0.5,
@@ -38,18 +44,23 @@ const ChatContent = (props) => {
   const classes = useStyles();
 
   const { conversation } = props;
-  const { latestMessageText, otherUser } = conversation;
-
+  const { latestMessageText, otherUser, unseenCount, isTyping} = conversation;
+  const textStyling = (isTyping ? classes.italicText : classes.previewText);
   return (
     <Box className={classes.root}>
       <Box>
         <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
-        <Typography className={classes.previewText}>
-          {latestMessageText}
+
+        <Typography className={textStyling}>
+          {!isTyping && latestMessageText}
+          {isTyping && "Typing..."}
         </Typography>
       </Box>
+      {unseenCount > 0 && <Box className={classes.notification}>
+        <Badge badgeContent={unseenCount} color="primary" max={999} />
+      </Box>}
     </Box>
   );
 };

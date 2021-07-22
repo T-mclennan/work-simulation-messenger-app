@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Box, Badge } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../actions/activeConversationActions";
@@ -33,7 +33,6 @@ class Chat extends Component {
     const length = conversation.messages.length;
     const lastMessageId = length > 0 ? conversation.messages[length - 1].id : null;
     const otherUser = conversation.otherUser;
-    const {unseenCount} = conversation;
     return (
       <Box
         onClick={() => this.handleClick(conversation, lastMessageId)}
@@ -46,9 +45,6 @@ class Chat extends Component {
           sidebar={true}
         />
         <ChatContent conversation={conversation} />
-        <Box className={classes.badge}>
-          <Badge badgeContent={unseenCount} color="primary" max={999} />
-        </Box>
       </Box>
     );
   }

@@ -8,7 +8,7 @@ const db = require("./db");
 
 // create store for sessions to persist in database
 const sessionStore = new SequelizeStore({ db });
-const validateUser = require('./middleware/validateUser')
+const {validateUser} = require('./middleware/validateUser')
 const { json, urlencoded } = express;
 
 const app = express();

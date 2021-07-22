@@ -1,10 +1,11 @@
 import React from "react";
 import { Box } from "@material-ui/core";
-import { SenderBubble, OtherUserBubble } from "../ActiveChat";
+import { SenderBubble, OtherUserBubble, TypingMessage } from "../ActiveChat";
 import moment from "moment";
 
 const Messages = (props) => {
-  const { messages, otherUser, userId, lastMessageReadId } = props;
+  const { messages, otherUser, userId, typing, lastMessageReadId } = props;
+
   return (
     <Box>
       {messages.map((message) => {
@@ -27,6 +28,7 @@ const Messages = (props) => {
           />
         );
       })}
+      {typing && <TypingMessage otherUser={otherUser}/>}
     </Box>
   );
 };

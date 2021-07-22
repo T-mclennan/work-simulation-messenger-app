@@ -32,8 +32,8 @@ router.get("/", async (req, res, next) => {
 
 /**
  * Route for resetting unseen message counter for the conversation by id.
- * @name patch/conversation/viewed/:id/:userId
- * @route PATCH /api/conversation/viewed/:id/:userId
+ * @name patch/conversation/viewed/:id/:senderId
+ * @route PATCH /api/conversation/viewed/:id/:senderId
  * @param {number} id - id of given Conversation
  * @param {string} senderId - id of user who is resetting unseenCount
  * @param {Object} user - Object of user data sent in header for validation
@@ -42,6 +42,7 @@ router.get("/", async (req, res, next) => {
  * @returns {Error}  401 - Validation error
  * @returns {Error}  403 - Forbidden error
  */
+
 router.patch("/viewed/:id/:senderId", async (req, res, next) => {
   try {
     if (!req.user) {
