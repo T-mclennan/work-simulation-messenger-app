@@ -81,6 +81,8 @@ export const setMessageReadInConvo = (messageId, convoId) => {
   return {
     type: SET_LAST_MESSAGE_READ,
     payload: { messageId, convoId }
+  }
+}
 
 export const newTypingNotification = (convoId, action) => {
   if (action === 'isTyping') return turnOnTypingNotification(convoId);

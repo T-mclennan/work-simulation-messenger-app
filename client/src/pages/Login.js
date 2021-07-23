@@ -61,7 +61,7 @@ const Login = (props) => {
                 <Box my={2}>
                   <FormControl margin="normal" fullWidth required>
                     <TextField
-                      fullWIdth
+                      fullWidth
                       label="Password"
                       aria-label="password"
                       type="password"

@@ -58,16 +58,17 @@ export const login = (credentials) => async (dispatch) => {
   }
 };
 
-export const logout = (id) => async (dispatch) => {
+export const logout = (id = null) => async (dispatch) => {
   try {
     await axios.delete("/auth/logout");
     await localStorage.removeItem("messenger-token");
     dispatch(gotUser({}));
-    socket.emit("logout", id);
+    id && socket.emit("logout", id);
   } catch (error) {
     console.error(error);
   }
 };
+
 
 // CONVERSATIONS THUNK CREATORS
 export const fetchConversations = () => async (dispatch) => {
@@ -85,6 +86,7 @@ const saveMessage = async (body) => {
 };
 
 const sendMessage = (data, body) => {
+  console.log(data)
   socket.emit("new-message", {
     message: data.message,
     recipientId: body.recipientId,
