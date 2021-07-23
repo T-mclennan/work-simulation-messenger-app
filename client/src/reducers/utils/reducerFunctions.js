@@ -40,7 +40,6 @@ export const processConversations = (conversations) => {
 }
 
 export const addOnlineUserToStore = (state, id) => {
-  console.log(`REDUCER FUNCITON: add online user ${id}`)
   return state.map((convo) => {
     if (convo.otherUser.id === id) {
       const convoCopy = { ...convo };
@@ -123,7 +122,6 @@ export const addNewConvoToStore = (state, recipientId, message) => {
 };
 
 export const setLastMessageRead = (state, {messageId, convoId}) => {
-  console.log(`setLastMessageRead - msgId: ${messageId} - convoId: ${convoId}`)
   const newState = state.map((convo) => {
     if (convo.id === convoId) {
       return {...convo, lastMessageReadId: messageId};

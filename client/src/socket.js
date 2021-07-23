@@ -48,12 +48,8 @@ socket.on("connect", () => {
       const { activeConversationUserId} = store.getState();
       const {id, conversationId, senderId} = message;
 
-      console.log(`********** INCOMING NEW MESSAGE FROM ${senderId} of id ${id}**********`)
       //if incoming message is not part of current conversation, mark as unseen.
       //If it is, mark as last message seen in database, and notify through websocket.
-      console.log('active convo')
-      console.log(`${activeConversationUserId} - ${senderId}`)
-      console.log((activeConversationUserId !== senderId))
       if (activeConversationUserId !== senderId) {
         store.dispatch(incrementUnseenCountOfConvo(conversationId));
       } else {

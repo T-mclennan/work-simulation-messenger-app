@@ -6,7 +6,6 @@ require("dotenv").config();
 /**
  * Module dependencies.
  */
-
 const { app, sessionStore } = require("../app");
 const http = require("http");
 const { v4: uuidv4 } = require('uuid');
@@ -51,8 +50,6 @@ io.on("connection", (socket) => {
   // onlineUsers is a Map - {id: socketId}
     onlineUsers.set(id, socketId)
 
-    console.log(`*** USER ${id} CAME ONLINE: ONLINE USERS ***`)
-    console.log(onlineUsers)
     // send the user who just went online to everyone else who is already online
     socket.broadcast.emit("add-online-user", id);
   });
@@ -95,8 +92,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("logout", (id) => {
-    console.log(`*** LOGOUT - ONLINE USERS ***`)
-    console.log(onlineUsers)
     if (onlineUsers.has(id)) {
       onlineUsers.delete(id);
       socket.broadcast.emit("remove-offline-user", id);
@@ -104,9 +99,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log(`User ${socketId} disconnected`)
-    console.log(`*** ONLINE USERS ***`)
-    console.log(onlineUsers)
     for (let [key, value] of onlineUsers.entries()) {
       if (value === socketId) {
         onlineUsers.delete(key)
