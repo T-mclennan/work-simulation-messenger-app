@@ -15,6 +15,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     marginBottom: 20,
+    // zIndex: 1,
   },
   input: {
     "&::placeholder": {

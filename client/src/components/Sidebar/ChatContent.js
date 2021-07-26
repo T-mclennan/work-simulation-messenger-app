@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     marginLeft: 20,
     flexGrow: 1,
+    height: '100%',
+    overflow: 'auto',
   },
   username: {
     fontWeight: "bold",

@@ -94,4 +94,4 @@ export const useAuthStyles = makeStyles((theme) => ({
   textField: {
     width: '100%'
   },
-}))
+}), {index: 1})

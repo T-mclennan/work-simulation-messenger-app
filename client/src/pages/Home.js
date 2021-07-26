@@ -10,7 +10,7 @@ import { clearOnLogout } from "../actions/authActions";
 
 const styles = {
   root: {
-    height: "97vh",
+    height: "100vh",
   },
 };
 
@@ -47,13 +47,9 @@ class Home extends Component {
     }
     return (
       <>
-        {/* logout button will eventually be in a dropdown next to username */}
-        <Button className={classes.logout} onClick={this.handleLogout}>
-          Logout
-        </Button>
         <Grid container component="main" className={classes.root}>
           <CssBaseline />
-          <SidebarContainer />
+          <SidebarContainer handleLogout={this.handleLogout}/>
           <ActiveChat />
         </Grid>
       </>

@@ -16,7 +16,9 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    height: '65vh',
+    overflow: 'auto'
   }
 }));
 
@@ -42,12 +44,12 @@ const ActiveChat = (props) => {
               userId={user.id}
               typing={conversation.isTyping}
             />
-            <Input
+          </Box>
+          <Input
               otherUser={conversation.otherUser}
               conversationId={conversation.id}
               user={user}
             />
-          </Box>
         </>
       )}
     </Box>

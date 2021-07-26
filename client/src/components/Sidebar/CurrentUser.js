@@ -3,8 +3,7 @@ import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { BadgeAvatar } from "./index";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-
+import ElipsisButton from './ElipsisButton';
 const useStyles = makeStyles(() => ({
   root: {
     height: 44,
@@ -25,11 +24,6 @@ const useStyles = makeStyles(() => ({
     fontWeight: "bold",
     marginLeft: 17
   },
-  ellipsis: {
-    color: "#95A7C4",
-    marginRight: 24,
-    opacity: 0.5
-  }
 }));
 
 const CurrentUser = (props) => {
@@ -42,7 +36,7 @@ const CurrentUser = (props) => {
       <BadgeAvatar photoUrl={user.photoUrl} online={true} />
       <Box className={classes.subContainer}>
         <Typography className={classes.username}>{user.username}</Typography>
-        <MoreHorizIcon classes={{ root: classes.ellipsis }} />
+        <ElipsisButton handleLogout={props.handleLogout}/>
       </Box>
     </Box>
   );
